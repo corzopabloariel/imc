@@ -41,6 +41,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
      */
     Route::group(['prefix' => 'cliente', 'as' => 'cliente'], function() {
         Route::get('index', ['uses' => 'adm\ClienteController@index', 'as' => '.index']);
+        Route::get('clientes', ['uses' => 'adm\ClienteController@clientes', 'as' => '.clientes']);
         Route::post('store', ['uses' => 'adm\ClienteController@store', 'as' => '.store']);
         Route::get('edit/{id}', ['uses' => 'adm\ClienteController@edit', 'as' => '.edit']);
         Route::get('delete/{id}', ['uses' => 'adm\ClienteController@destroy', 'as' => '.destroy']);

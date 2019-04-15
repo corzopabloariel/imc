@@ -54,7 +54,7 @@
                 </ul>
             </li>
             <li>
-                <a href="#trabajosSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-camera-retro"></i>Portfolio</a>
+                <a href="#trabajosSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-camera-retro"></i>Portfolio OK</a>
                 <ul class="collapse list-unstyled" id="trabajosSubmenu">
                     <li>
                         <a href="{{ route('familia.index')}}">Familia de Trabajos</a>
@@ -85,7 +85,7 @@
                 <a href="#clientesUsuariosSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-user-shield"></i>Clientes</a>
                 <ul class="collapse list-unstyled" id="clientesUsuariosSubmenu">
                     <li>
-                        <a href="{{ route('cliente.index')}}">Listado de clientes</a>
+                        <a href="{{ route('cliente.clientes')}}">Listado de clientes</a>
                     </li>
                 </ul>
             </li>

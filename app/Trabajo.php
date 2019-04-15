@@ -8,15 +8,12 @@ class Trabajo extends Model
 {
     protected $fillable = [
         'nombre',
-        'subtitulo',
-        'descripcion',
-        'image',
         'empresa',
         'ubicacion',
         'volumen',
-        'tiempo',
-        'order',
-        'familia_id'
+        'familia_id',
+        'orden',
+        'data'
     ];
     public function imagenes()
     {

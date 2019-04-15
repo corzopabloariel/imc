@@ -156,7 +156,7 @@ const ENTIDADES = {
             familia_id: {TIPO:"TP_ENUM",VISIBILIDAD:"TP_VISIBLE",ENUM:null,NOMBRE:"familia de trabajo"},
             orden: {TIPO:"TP_STRING",MAXLENGTH:3,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-center text-uppercase"},
             titulo: {TIPO:"TP_STRING",MAXLENGTH:150,FIELDSET:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"título"},
-            descripcion: {TIPO:"TP_TEXT",MAXLENGTH:150,FIELDSET:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"descripción"},
+            descripcion: {TIPO:"TP_TEXT",MAXLENGTH:150,FIELDSET:1,EDITOR:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"descripción"},
             tiempo: {TIPO:"TP_STRING",MAXLENGTH:150,FIELDSET:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"tiempo"}
         },
         JSON: {
@@ -179,8 +179,7 @@ const ENTIDADES = {
         FORM: [
             {
                 orden: '<div class="col-6 col-md-2">/orden/</div>',
-                nombre: '<div class="col-md-6 col-12">/nombre/</div>',
-                BTN: '<div class="col-6 col-md-1">/BTN/</div>',
+                nombre: '<div class="col-md-6 col-12">/nombre/</div>'
             },
             {
                 empresa: '<div class="col-md-6 col-12">/empresa/</div>',

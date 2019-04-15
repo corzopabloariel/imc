@@ -22,6 +22,7 @@
                         <div class="row mb-2 justify-content-center">
                             <div class="col-12 text-center">
                                 <button type="button" onclick="imageAdd()" class="btn btn-dark">Agregar imagen <small>612x396</small></button>
+                                <button type="submit" class="btn btn-success mr-2"><i class="fas fa-check"></i></button>
                             </div>
                         </div>
                         <div class="container-form-image row"></div>
@@ -103,34 +104,28 @@
         $("#wrapper-tabla").toggle("fast");
 
         if(id != 0)
-            action = `{{ url('/adm/familia/producto/update/') }}/${id}`;
+            action = `{{ url('/adm/familia/trabajo/update/') }}/${id}`;
         else
-            action = "{{ url('/adm/familia/producto/store') }}";
+            action = "{{ url('/adm/familia/trabajo/store') }}";
         if(data !== null) {
             data.data = JSON.parse(data.data);
-            
-            $(`[name="titulo"]`).val(data.titulo);
             $('[name="orden"]').val(data.orden);
-            if(data.data.video !== null)
-                $('[name="video"]').val(data.data.video)
-            if(parseInt(data.destacado))
-                $("[name='destacado']").attr("checked",true)
-            // $("#wrapper-opciones,#wrapper-imagenes").html("");
-            CKEDITOR.instances['descripcion'].setData(data.data.descripcion);
-            CKEDITOR.instances['detalle'].setData(data.data.detalle);
+            $(`[name="nombre"]`).val(data.nombre);
+            $(`[name="empresa"]`).val(data.empresa);
+            $(`[name="ubicacion"]`).val(data.ubicacion);
+            $(`[name="volumen"]`).val(data.volumen);
             $("#familia_id").val(data.familia_id).trigger("change");
-            data.data.caracteristicas.forEach(element => {
-                addOpciones($("#btnCaracteristicas"),element);
+            for(let x in data.data) {
+                for(let y in data.data[x]) {
+                    if(y == "descripcion")
+                        CKEDITOR.instances[`${y}_${x}`].setData(data.data[x][y]);
+                    else
+                        $(`[name="${y}_${x}"]`).val(data.data[x][y])
+                }
+            }
+            data.imagenes.forEach(function(i) {
+                imageAdd(i);
             });
-            data.imagenes.forEach(element => {
-                addImagenes($("#btnImagenes"), element);
-            });
-
-            Arr = [];
-            data.productos.forEach(function(p) {
-                Arr.push(p.id);
-            });
-            $("#productos").val(Arr);
         }
         elmnt = document.getElementById("form");
         elmnt.scrollIntoView();
@@ -139,7 +134,7 @@
     editProducto = function(id, t) {
         $(t).attr("disabled",true);
         let promise = new Promise(function (resolve, reject) {
-            let url = `{{ url('/adm/familia/producto/edit') }}/${id}`;
+            let url = `{{ url('/adm/familia/trabajo/edit') }}/${id}`;
             var xmlHttp = new XMLHttpRequest();
             xmlHttp.responseType = 'json';
             xmlHttp.open( "GET", url, true );
@@ -195,34 +190,6 @@
             target.find("> fieldset.bg-dark:last-child()").find(".row img").attr("src",imgAux);
         }
     }
-    addImagenes = function(t, data = null) {
-        let target = $("#wrapper-imagenes");
-        let html = "";
-        if(window.img === undefined) window.img = 0;
-        window.img ++;
-        html += '<fieldset class="bg-dark border-dark">';
-            html += '<div class="row">';
-                html += '<div class="col-md-8 d-flex flex align-items-center">';
-                    html += '<div class="custom-file">';
-                        html += `<input onchange="readURL(this, '#card-img-${window.img}');" required type="file" name="img[]" accept="image/*" class="custom-file-input" lang="es">`;
-                        html += '<label data-invalid="Archivo - 340x340" data-valid="Archivo" class="custom-file-label mb-0" data-browse="Buscar" for="customFileLang"></label>';
-                    html += '</div>';
-                html += '</div>';
-                html += '<div class="col-md-4 position-relative d-flex flex align-items-center">';
-                    html += `<input name="nombreImg[]" type="hidden" value="${window.img}"/>`;
-                    html += `<img id="card-img-${window.img}" class="w-100 d-block" src="" onError="this.src='{{ asset('images/general/no-img.png') }}'" />`;
-                    html += `<i onclick="$(this).closest('fieldset.bg-dark').remove()" class="fas fa-backspace position-absolute text-danger"></i>`;
-                html += '</div>';
-            html += '</div>';
-        html += '</fieldset>';
-    
-        target.append(html);
-        if(data !== null) {
-            imageAux = '{{ asset("/") }}' + data.img;
-            target.find("> fieldset.bg-dark:last-child()").find(".row img").attr("src",imageAux);
-            target.find("> fieldset.bg-dark:last-child()").find(".row input[type='hidden']").val(data.img);
-        }
-    }
     readURL = function(input, target) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -231,19 +198,16 @@
                 $(`#${target}`).attr(`src`,`${e.target.result}`);
             };
             reader.readAsDataURL(input.files[0]);
-            $(`${target}`).parent().find("input[type='hidden']").val(0);
         }
     };
     addDelete = function(t) {
         addProducto($("#btnADD"));
-        $(`[name="orden"],[name="video"],[name="especificaciones"],[name="titulo"]`).val("");
-        $("[name='destacado']").attr("checked",false);
-        $("#wrapper-opciones,#wrapper-imagenes").html("");
-        CKEDITOR.instances['descripcion'].setData('');
-        CKEDITOR.instances['detalle'].setData('');
-        $('#productos option:selected').removeAttr('selected');
-        $("#productos").trigger('chosen:updated');
+        $(`input`).val("");
         $("#familia_id").val($("#familia_id option:first-child()").val()).trigger("change");
+        $(".container-form-image").html("");
+
+        for(name in CKEDITOR.instances)
+            CKEDITOR.instances[name].setData('');
     };
     deleteProducto = function(id, t) {
         $(t).attr("disabled",true);
@@ -287,13 +251,27 @@
         cursor: "move"
     }).disableSelection();
 
-    imageAdd = function() {
+    imageAdd = function(data = null) {
         if(window.countImage === undefined) window.countImage = 0;
         window.countImage ++;
         let imgAUX = "{{ asset('images/general/no-img.png') }}";
         let img = `<img id="src_image_${window.countImage}" src="" onError="this.src='${imgAUX}'" class="w-100 d-block mb-1 rounded img-thumbnail"/>`;
-        
-        $("#form .container-form-image").append(`<div class="col-12 col-md-4 my-2">${img}${window.seccionImage.formulario(window.countImage,1)}</div>`);
+        let html = "";
+        html += `<div class="col-12 col-md-4 my-2 position-relative">`;
+            html += `<i onclick="$(this).parent().remove()" class="fas fa-times-circle position-absolute" style="top: -5px; right: 10px; cursor: pointer;"></i>`;
+            html += `<input type="hidden" name="imageURL[]" value="0" />`;
+            html += `${img}`;
+            html += `${window.seccionImage.formulario(window.countImage,"image")}`;
+        html += `</div>`;
+        $("#form .container-form-image").append(html);
+
+        if(data !== null) {
+            target = $("#form .container-form-image").find("> div:last-child");
+            src = "{{ asset('/') }}" + data.image;
+            target.find("img").attr("src",src);
+            target.find(`input[type="text"]`).val(data.orden);
+            target.find(`input[type="hidden"]`).val(data.image);
+        }
     }
     init = function() {
         console.log("CONSTRUYENDO FORMULARIO")

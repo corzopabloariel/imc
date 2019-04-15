@@ -40,208 +40,92 @@ class TrabajoController extends Controller
      */
     public function store(Request $request, $data = null)
     {
+        $aux = ["titulo" => null,"descripcion" => null,"tiempo" => null];
         $datosRequest = $request->all();
         
-        $model = new Producto();
         $ARR_data = [];
-        foreach($model->getFillable() AS $f) {
-            if($f == "data") {
-                $ARR_data[$f] = [];
-                $ARR_data[$f]["descripcion"] = "";
-                $ARR_data[$f]["detalle"] = "";
-                $ARR_data[$f]["video"] = null;
-                $ARR_data[$f]["caracteristicas"] = [];
-                continue;
-            }
-            if($f == "destacado") {
-                $ARR_data[$f] = !empty($datosRequest[$f]) ? 1 : 0;
-                continue;
-            }
+        $ARR_data["nombre"] = $datosRequest["nombre"];
+        $ARR_data["empresa"] = $datosRequest["empresa"];
+        $ARR_data["ubicacion"] = $datosRequest["ubicacion"];
+        $ARR_data["volumen"] = $datosRequest["volumen"];
+        $ARR_data["familia_id"] = $datosRequest["familia_id"];
+        $ARR_data["orden"] = $datosRequest["orden"];
+        $ARR_data["data"] = [];
+        $ARR_data["data"]["esp"] = $aux;
+        $ARR_data["data"]["ing"] = $aux;
+        $ARR_data["data"]["ita"] = $aux;
 
-            if(isset($datosRequest[$f]))
-                $ARR_data[$f] = $datosRequest[$f];
+        foreach($ARR_data["data"] AS $k => $v) {
+            foreach($ARR_data["data"][$k] AS $kk => $vv)
+                $ARR_data["data"][$k][$kk] = $datosRequest["{$kk}_{$k}"];
         }
-        $ARR_data["data"]["especificaciones"] = null;
-        if(isset($datosRequest["video"]))
-            $ARR_data["data"]["video"] = $datosRequest["video"];
-        if(isset($datosRequest["descripcion"]))
-            $ARR_data["data"]["descripcion"] = $datosRequest["descripcion"];
-        if(isset($datosRequest["detalle"]))
-            $ARR_data["data"]["detalle"] = $datosRequest["detalle"];
-        // data: {descripcion: “”, detalle: “”, caracteristicas: [], video: “”}
-        /**
-         * 
-         */
+        $ARR_data["data"] = json_encode($ARR_data["data"]);
+        
         if(is_null($data)) {
-            
-            if(isset($datosRequest["nombre"])) {
-                $files = $request->file('img_opcion');
-                for($i = 0; $i < count($datosRequest["nombre"]); $i++) {
-                    $img = null;
-                    
-                    if(!is_null($files[$i])) {
-                        $path = public_path('images/familias/productos/');
-                        if (!file_exists($path))
-                            mkdir($path, 0777, true);
-                        
-                        $imageName = time().'_caracteristicas_' . ($i + 1) . '.'.$files[$i]->getClientOriginalExtension();
-                        $files[$i]->move($path, $imageName);
-                        $img = "images/familias/productos/{$imageName}";
-                    }
-                    $ARR_data["data"]["caracteristicas"][] = ["img" => $img,"nombre" => $datosRequest["nombre"][$i]];
-                }
-            }
-            $file = $request->file('especificaciones');
-            if(!is_null($file)) {
-                $path = public_path('documents/');
-                if (!file_exists($path))
-                    mkdir($path, 0777, true);
-                $imageName = time().'_documents.'.$file->getClientOriginalExtension();
-                $file->move($path, $imageName);
-                $ARR_data["data"]["especificaciones"] = "documents/{$imageName}";
-            }
-
-            $ARR_data["data"] = json_encode($ARR_data["data"]);
-            $producto = Producto::create($ARR_data);
-            $producto->productos()->sync($request->get('productos'));
-
-            $Arr = [];
-            $files = $request->file('img');
-            if(!is_null($files)) {
-                $path = public_path('images/familias/productos/');
+            $trabajo = Trabajo::create($ARR_data);
+            $imagenes = $request->file('image_image');
+            if(!is_null($imagenes)) {
+                $path = public_path('images/trabajos/');
                 if (!file_exists($path))
                     mkdir($path, 0777, true);
                 for($i = 0; $i < count($files); $i++) {
-                    $imageName = time().'_producto_' . ($i + 1) . '.'.$files[$i]->getClientOriginalExtension();
+                    $imageName = time().'_trabajo_' . ($i + 1) . '.'.$files[$i]->getClientOriginalExtension();
                     $files[$i]->move($path, $imageName);
-                    $img = "images/familias/productos/{$imageName}";
-                    Productosimg::create([
-                        "producto_id" => $producto["id"],
+                    $img = "images/trabajos/{$imageName}";
+                    Trabajoimagen::create([
+                        "producto_id" => $trabajo["id"],
                         "img" => $img,
-                        "orden" => $i + 1
+                        "orden" => $datosRequest["orden_image"][$i]
                     ]);
                 }
             }
-            
         } else {
-            /* -------------------------------------------------
-                CARACTERÍSTICAS DE PRODUCTO
-            -------------------------------------------------- */
-            if(isset($datosRequest["nombreCar"])) {
-                
-                $files = $request->file('img_opcion');
-                $A_caracteristicas = [];
-                for($i = 0; $i < count($datosRequest["nombreCar"]); $i++) {
-                    $img = null;
-                    $caracteristica = null;
-                    /**
-                     * TRUE: img nueva
-                     */
-                    if(is_numeric($datosRequest["nombreCar"][$i])) {
-                        $filesAux = $files[$i];
-                        
-                        $path = public_path('images/familias/productos/');
-                        if (!file_exists($path))
-                            mkdir($path, 0777, true);
-                        
-                        $imageName = time().'_caracteristicas_' . ($i + 1) . '.'.$filesAux->getClientOriginalExtension();
-                        
-                        $filesAux->move($path, $imageName);
-                        $img = "images/familias/productos/{$imageName}";
-                    } else {
-                        for($j = 0; $j < count($data["data"]["caracteristicas"]); $j++) {
-                            if(strcasecmp($data["data"]["caracteristicas"][$j]["img"], $datosRequest["nombreCar"][$i]) == 0) {
-                                
-                                $A_caracteristicas[] = $data["data"]["caracteristicas"][$j]["img"];
-                                $img = $data["data"]["caracteristicas"][$j]["img"];
-                                break;
-                            }
-                        }
-                    }
-                    $ARR_data["data"]["caracteristicas"][] = ["img" => $img,"nombre" => $datosRequest["nombre"][$i]];
-                }
-                
-                for($j = 0; $j < count($data["data"]["caracteristicas"]); $j++) {
-                    if(!in_array($data["data"]["caracteristicas"][$j]["img"],$A_caracteristicas))  {
-                        $filename = public_path() . "/" . $data["data"]["caracteristicas"][$j]["img"];
-                        if (file_exists($filename))
-                            unlink($filename);
-                    }
-                }
-            } else {
-                for($j = 0; $j < count($data["data"]["caracteristicas"]); $j++) {
-                    $filename = public_path() . "/" . $data["data"]["caracteristicas"][$j]["img"];
-                    if (file_exists($filename))
-                        unlink($filename);
-                }
-            }
-            $file = $request->file('especificaciones');
-            if(!is_null($file)) {
-                $filename = public_path() . "/" . $data["data"]["especificaciones"];
-                if(!empty($data["data"]["especificaciones"])) {
-                    if (file_exists($filename))
-                        unlink($filename);
-                }
-                $path = public_path('documents/');
-                if (!file_exists($path))
-                    mkdir($path, 0777, true);
-                $imageName = time().'_documents.'.$file->getClientOriginalExtension();
-                $file->move($path, $imageName);
-                $ARR_data["data"]["especificaciones"] = "documents/{$imageName}";
-            }
-            $ARR_data["data"] = json_encode($ARR_data["data"]);
-            $imagenesAux = [];
-            $imagenes = $data["imagenes"];
+            $imagenesDATA = $data["imagenes"];
             unset($data["imagenes"]);
-            unset($data["productos"]);
             
             $data->fill($ARR_data);
             $data->save();
-            $data->productos()->sync($request->get('productos'));
             /* -------------------------------------------------
-                IMAGENES DE PRODUCTO
+                IMAGENES
             -------------------------------------------------- */
-            $files = $request->file('img');
-            
-            if(isset($datosRequest["nombreImg"])) {
-                for($i = 0; $i < count($datosRequest["nombreImg"]); $i++) {
-                    $image = null;
-                    $img = null;
-                    if(is_numeric($datosRequest["nombreImg"][$i])) {
-                        if(!is_null($files)) {
-                            $filesAux = $files[$i];
-                            $path = public_path('images/familias/productos/');
-                            if (!file_exists($path))
-                                mkdir($path, 0777, true);
-                            $imageName = time().'_producto_' . ($i + 1) . '.'.$filesAux->getClientOriginalExtension();
-                            $filesAux->move($path, $imageName);
-                            $img = "images/familias/productos/{$imageName}";
-                        }
-                        Productosimg::create([
-                            "producto_id" => $data["id"],
-                            "img" => $img,
-                            "orden" => $i + 1
-                        ]);
-                    } else {
-                        for($j = 0; $j < count($imagenes); $j++) {
-                            if(strcasecmp($imagenes[$j]["img"], $datosRequest["nombreImg"][$i]) == 0) {
-                                
-                                $imagenes[$j]->fill(["orden" => $i + 1]);
-                                $imagenes[$j]->save();
-                                $imagenes[$j]["sigue"] = 1;
-                            }
-                        }
-                        
-                    }
+            $imageURL = $datosRequest["imageURL"];
+            $Arr_imagen = [];
+            $imagenes = $request->file('image_image');
+            $path = public_path('images/trabajos/');
+            if (!file_exists($path))
+                mkdir($path, 0777, true);
+            for($i = 0 ; $i < count($imageURL) ; $i++) {
+                if(isset($imagenes[$i])) {
+                    $imageName = time().'_trabajo_' . ($i + 1) . '.'.$imagenes[$i]->getClientOriginalExtension();
+                    $imagenes[$i]->move($path, $imageName);
                     
-                }
-                for($j = 0; $j < count($imagenes); $j++) {
-                    if(!isset($imagenes[$j]["sigue"])) {
-                        $filename = public_path() . "/" . $imagenes[$j]["img"];
+                    Trabajoimagen::create([
+                        "trabajo_id" => $data["id"],
+                        "image" => "images/trabajos/{$imageName}",
+                        "orden" => $datosRequest["orden_image"][$i]
+                    ]);
+                    if(!is_numeric($imageURL[$i])) {
+                        $filename = public_path() . "/{$imageURL[$i]}";
                         if (file_exists($filename))
                             unlink($filename);
-                        Productosimg::destroy($imagenes[$j]["id"]);
+                        $aux = $data->imagenes()->where('image', $imageURL[$i])->first();
+                        Trabajoimagen::destroy($aux["id"]);
                     }
+                    continue;
+                }
+                $aux = $data->imagenes()->where('image', $imageURL[$i])->first();
+                $Arr_imagen[] = $aux["id"];
+                $aux->fill(["orden" => $datosRequest["orden_image"][$i]]);
+                $aux->save();
+            }
+            if(count($imagenesDATA) != count($Arr_imagen)) {
+                foreach($imagenesDATA AS $i) {
+                    if(in_array($i["id"],$Arr_imagen))
+                        continue;
+                    $filename = public_path() . "/{$i["image"]}";
+                    if (file_exists($filename))
+                        unlink($filename);
+                    Trabajoimagen::destroy($i["id"]);
                 }
             }
         }
@@ -268,9 +152,8 @@ class TrabajoController extends Controller
      */
     public function edit($id)
     {
-        $data = Producto::find($id);
+        $data = Trabajo::find($id);
         $data["imagenes"] = $data->imagenes;
-        $data["productos"] = $data->productos;
         return $data;
     }
 
@@ -298,25 +181,14 @@ class TrabajoController extends Controller
      */
     public function destroy($id)
     {
-        $prev_search = Proyecto::where("producto_id",$id)->get();
-        if(!empty($prev_search))
-            return -1;
-
         $data = self::edit($id);
-        $data["data"] = json_decode($data["data"],true);
-        /** ELIMINO características */
-        for($i = 0; $i < count($data["data"]["caracteristicas"]); $i ++) {
-            $filename = public_path() . "/" . $data["data"]["caracteristicas"][$i]["img"];
-            if (file_exists($filename))
-                unlink($filename);
-        }
         /** ELIMINO imagenes */
         foreach($data["imagenes"] AS $img) {
-            $filename = public_path() . "/" . $img["img"];
+            $filename = public_path() . "/" . $img["image"];
             if (file_exists($filename))
                 unlink($filename);
         }
-        Proyecto::destroy($id);
+        Trabajo::destroy($id);
         return  0;
     }
 }
