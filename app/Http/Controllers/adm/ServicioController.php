@@ -4,9 +4,8 @@ namespace App\Http\Controllers\adm;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Proyecto;
-use App\Producto;
-class ProyectoController extends Controller
+use App\Servicio;
+class ServicioController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +14,9 @@ class ProyectoController extends Controller
      */
     public function index()
     {  
-        $title = "Proyectos";
-        $proyectos = Proyecto::orderBy('orden')->get();
-        $productos = Producto::orderBy('orden')->pluck('titulo', 'id');
-        return view('adm.proyecto.index',compact('title','seccion','proyectos','productos'));
+        $title = "Servicios";
+        $servicios = Servicio::orderBy('orden')->get();
+        return view('adm.servicio.index',compact('title','servicios'));
     }
 
     /**
@@ -40,6 +38,7 @@ class ProyectoController extends Controller
     public function store(Request $request, $data = null)
     {
         $datosRequest = $request->all();
+        dd($datosRequest);
         
         $model = new Proyecto();
         $ARR_data = [];

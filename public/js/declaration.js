@@ -157,7 +157,8 @@ const ENTIDADES = {
             orden: {TIPO:"TP_STRING",MAXLENGTH:3,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-center text-uppercase"},
             titulo: {TIPO:"TP_STRING",MAXLENGTH:150,FIELDSET:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"título"},
             descripcion: {TIPO:"TP_TEXT",MAXLENGTH:150,FIELDSET:1,EDITOR:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"descripción"},
-            tiempo: {TIPO:"TP_STRING",MAXLENGTH:150,FIELDSET:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"tiempo"}
+            tiempo: {TIPO:"TP_STRING",MAXLENGTH:150,FIELDSET:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"tiempo"},
+            cosa: {TIPO:"TP_STRING",MAXLENGTH:10,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"cosa"}
         },
         JSON: {
             titulo: {
@@ -179,7 +180,8 @@ const ENTIDADES = {
         FORM: [
             {
                 orden: '<div class="col-6 col-md-2">/orden/</div>',
-                nombre: '<div class="col-md-6 col-12">/nombre/</div>'
+                nombre: '<div class="col-md-6 col-12">/nombre/</div>',
+                cosa: '<div class="col-md-6 col-12">/cosa/</div>'
             },
             {
                 empresa: '<div class="col-md-6 col-12">/empresa/</div>',
@@ -213,4 +215,117 @@ const ENTIDADES = {
             image: {onchange:{F:"readURL(this,'/id/')",C:"id"}}
         }
     },
+    servicio: {
+        ATRIBUTOS: {
+            icon: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Archivo seleccionado",INVALID:"Seleccione archivo - 96x210",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE"},
+            tipo: {TIPO:"TP_ENUM",VISIBILIDAD:"TP_VISIBLE",ENUM:{EMP:"Empresa",ALQ:"Alquiler de equipo"}},
+            orden: {TIPO:"TP_STRING",MAXLENGTH:3,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-center text-uppercase"}
+        },
+        FORM: [
+            {
+                orden: '<div class="col-12 col-md-2">/orden/</div>',
+                tipo: '<div class="col-12 col-md-4">/tipo/</div>',
+                BTN: '<div class="col-3 col-md-1">/BTN/</div>'
+            },
+            {
+                icon: '<div class="col-12 col-md-4">/icon/<p class="text-center mb-0">Imagen doble [Nomal / Inversa]</p></div>',
+            },
+        ],
+        FUNCIONES: {
+            tipo: {onchange:"cambioTipo(this)"},
+            icon: {onchange:{F:"readURL(this,'/id/')",C:"id"}}
+        }
+    },
+    servicioEMP: {
+        ATRIBUTOS: {
+            titulo: {TIPO:"TP_STRING",MAXLENGTH:150,FIELDSET:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"título"},
+            descripcion: {TIPO:"TP_TEXT",FIELDSET:1,EDITOR:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"descripción"},
+        },
+        JSON: {
+            titulo: {
+                esp: "español",
+                ing: "inglés",
+                ita: "italiano"
+            },
+            descripcion: {
+                esp: "español",
+                ing: "inglés",
+                ita: "italiano"
+            }
+        },
+        FORM: [
+            {
+                titulo: '<div class="col-12 col-md-6">/titulo/</div>',
+                descripcion: '<div class="col-12 col-md-6">/descripcion/</div>',
+            }
+        ]
+    },
+    servicioEMPdetalle: {
+        ATRIBUTOS: {
+            titulo: {TIPO:"TP_STRING",MAXLENGTH:150,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"título"},
+        },
+        JSON: {
+            titulo: {
+                esp: "español",
+                ing: "inglés",
+                ita: "italiano"
+            }
+        },
+        FORM: [
+            {
+                titulo: '<div class="col-12">/titulo/</div>'
+            }
+        ]
+    },
+    servicioEMPseccion: {
+        ATRIBUTOS: {
+            titulo: {TIPO:"TP_STRING",MAXLENGTH:150,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"título"},
+            descripcion: {TIPO:"TP_TEXT",FIELDSET:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"descripción"},
+        },
+        JSON: {
+            descripcion: {
+                esp: "español",
+                ing: "inglés",
+                ita: "italiano"
+            },
+            titulo: {
+                esp: "español",
+                ing: "inglés",
+                ita: "italiano"
+            }
+        },
+        FORM: [
+            {
+                titulo: '<div class="col-12 col-md-6">/titulo/</div>',
+                //BTN: {H:'<div class="col-6">/BTN/<div class="mt-2 row detalles"></div></div>',ONCLICK:"addDetalle(this)",NOMBRE:"detalle<i class='fas fa-plus ml-2'></i>",CLASS:"btn-block btn-dark text-uppercase text-center"}
+            },
+            {
+                descripcion: '<div class="col-12">/descripcion/</div>'
+            }
+        ]
+    },
+    servicioEMPimagen: {
+        ATRIBUTOS: {
+            image: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Archivo seleccionado",INVALID:"Seleccione archivo - 612x396",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE"},
+            descripcion: {TIPO:"TP_TEXT",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"descripción"},
+        },
+        JSON: {
+            descripcion: {
+                esp: "español",
+                ing: "inglés",
+                ita: "italiano"
+            },
+        },
+        FORM: [
+            {
+                image: '<div class="col-12">/image/</div>',
+            },
+            {
+                descripcion: '<div class="col-12">/descripcion/</div>'
+            }
+        ],
+        FUNCIONES: {
+            image: {onchange:{F:"readURL(this,'/id/')",C:"id"}}
+        }
+    }
 };

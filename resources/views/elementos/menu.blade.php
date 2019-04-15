@@ -38,7 +38,7 @@
                 <a href="#serviciosSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-project-diagram"></i>Servicios</a>
                 <ul class="collapse list-unstyled" id="serviciosSubmenu">
                     <li>
-                        <a href="{{ route('familia.index')}}">Todos los Servicios</a>
+                        <a href="{{ route('servicio.index')}}">Todos los Servicios</a>
                     </li>
                 </ul>
             </li>

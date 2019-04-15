@@ -4,13 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Proyecto extends Model
+class Servicio extends Model
 {
     protected $fillable = [
-        'img',
-        'titulo',
-        'texto',
+        'tipo',
         'orden',
+        'data',
         'producto_id'
     ];
 }

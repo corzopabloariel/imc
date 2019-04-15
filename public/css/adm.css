@@ -261,7 +261,13 @@ fieldset > p:last-child {
 }
 .container-form .row + .row {
     margin-top: 2em;
-} 
+}
+.container-form-imagenes .row + .row {
+    margin-top: 0;
+}
+.container-form-imagenes .form-control + .form-control {
+    margin-top: 5px;
+}
 /* ---------------------------------------------------
     TABLE
 ----------------------------------------------------- */

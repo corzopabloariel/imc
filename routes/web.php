@@ -71,12 +71,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
     /**
      * PROYECTOS
      */
-    Route::group(['prefix' => 'proyecto', 'as' => 'proyecto'], function() {
-        Route::get('index', ['uses' => 'adm\ProyectoController@index', 'as' => '.index']);
-        Route::post('store', ['uses' => 'adm\ProyectoController@store', 'as' => '.store']);
-        Route::get('edit/{id}', ['uses' => 'adm\ProyectoController@edit', 'as' => '.edit']);
-        Route::get('delete/{id}', ['uses' => 'adm\ProyectoController@destroy', 'as' => '.destroy']);
-        Route::post('update/{id}', ['uses' => 'adm\ProyectoController@update', 'as' => 'update']);
+    Route::group(['prefix' => 'servicio', 'as' => 'servicio'], function() {
+        Route::get('index', ['uses' => 'adm\ServicioController@index', 'as' => '.index']);
+        Route::post('store', ['uses' => 'adm\ServicioController@store', 'as' => '.store']);
+        Route::get('edit/{id}', ['uses' => 'adm\ServicioController@edit', 'as' => '.edit']);
+        Route::get('delete/{id}', ['uses' => 'adm\ServicioController@destroy', 'as' => '.destroy']);
+        Route::post('update/{id}', ['uses' => 'adm\ServicioController@update', 'as' => 'update']);
     });
     /**
      * PRODUCTOS
