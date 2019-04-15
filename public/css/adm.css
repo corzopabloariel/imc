@@ -248,6 +248,19 @@ fieldset legend.legend-btn {
 }
 fieldset > p:last-child {
     margin-bottom: 0;
+}
+/* ---------------------------------------------------
+    FORM
+----------------------------------------------------- */
+.custom-file {
+    height: calc(1.5em + .75rem + 5px);
+}
+.form-control + .form-control,
+.container-form .custom-file + .custom-file {
+    margin-top: 1em;
+}
+.container-form .row + .row {
+    margin-top: 2em;
 } 
 /* ---------------------------------------------------
     TABLE

@@ -19,60 +19,37 @@
                     </button>
                     <form id="form" novalidate class="pt-2" action="{{ url('/adm/familia/store') }}" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                        <div class="row justify-content-md-center">
-                            <div class="col-md-6">
-                                <img id="card-img" class="w-100 d-block" src="" onError="this.src='{{ asset('images/general/no-img.png') }}'" />
-                            </div>
-                            <div class="col-md-6 d-flex align-items-center">
-                                <div class="w-100">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <input tabindex="1" placeholder="Orden" maxlength="3" name="orden" type="text" class="form-control text-uppercase text-center"/>
-                                        </div>
-                                        <div class="col-6">
-                                            <button tabindex="3" type="submit" class="btn btn-block btn-success mr-1"><i class="fas fa-check"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-4">
-                                        <div class="col-12">
-                                            <div class="custom-file">
-                                                <input onchange="readURL(this);" required type="file" name="img" accept="image/*" class="custom-file-input" lang="es">
-                                                <label data-invalid="Seleccione archivo - 304x293" data-valid="Archivo seleccionado" class="custom-file-label mb-0" data-browse="Buscar" for="customFileLang"></label>
-                                            </div>
-                                            <small class="form-text text-muted">
-                                            La dimensión de la imagen es la recomendada
-                                            </small>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-4">
-                                        <div class="col-12">
-                                            <input tabindex="2" placeholder="Nombre" name="titulo" type="text" class="form-control"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="container-form"></div>
                     </form>
                 </div>
             </div>
         </div>
         <div class="card mt-2" id="wrapper-tabla">
             <div class="card-body">
-                <table class="table table-img-4 mt-2 mb-0" id="tabla">
+                <table class="table mt-2 mb-0" id="tabla">
                     <thead class="thead-dark">
-                        <th class="text-uppercase">Orden</th>
-                        <th class="text-uppercase">Imagen</th>
+                        <th class="text-uppercase text-center" style="width:100px;">Orden</th>
                         <th class="text-uppercase">Nombre</th>
-                        <th class="text-uppercase">acción</th>
+                        <th class="text-uppercase text-center" style="width:150px;">acción</th>
                     </thead>
                     <tbody>
                         @if(count($familias) != 0)
                             @foreach($familias AS $familia)
+                            @php
+                                $idiomas = ["esp" => "español","ing" => "inglés","ita"=>"italiano"];
+                                $nombres = "";
+                                $familia["nombre"] = json_decode($familia["nombre"], true);
+                                foreach($familia["nombre"] AS $k => $v) {
+                                    $nombres .= "<fieldset>";
+                                        $nombres .= "<legend>{$idiomas[$k]}</legend>";
+                                        $nombres .= $v;
+                                    $nombres .= "</fieldset>";
+                                }
+                                @endphp
                                 <tr data-id="{{ $familia['id'] }}">
-                                    <td class="text-uppercase">{!! $familia["orden"] !!}</td>
-                                    <td><img onError="this.src='{{ asset('images/general/no-img.png') }}'" src="{{ asset($familia['img']) }}?t=<?php echo time(); ?>" /></td>
-                                    <td>{!! $familia["titulo"] !!}</td>
-                                    <td>
+                                    <td class="text-uppercase text-center">{!! $familia["orden"] !!}</td>
+                                    <td>{!! $nombres !!}</td>
+                                    <td class="text-center">
                                         <button type="button" onclick="editFamilia({{ $familia['id'] }}, this)" class="btn btn-warning mr-1"><i class="fas fa-pencil-alt"></i></button>
                                         <button type="button" onclick="deleteFamilia({{ $familia['id'] }}, this)" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
                                     </td>
@@ -102,6 +79,7 @@ $(document).on("ready",function() {
         CKEDITOR.replace( $(this).attr("name") );
     });
 });
+window.seccion = new Pyrus("familia");
 let deleteFamilia = function(id, t) {
     $(t).attr("disabled",true);
     let promise = new Promise(function (resolve, reject) {
@@ -172,10 +150,10 @@ addFamilia = function(t, id = 0, data = null) {
     else
         action = "{{ url('/adm/familia/store') }}";
     if(data !== null) {
-        console.log(data)
+        data.nombre = JSON.parse(data.nombre);
+        for(let x in data.nombre)
+            $(`[name="nombre_${x}"]`).val(data.nombre[x]);
         $(`[name="orden"]`).val(data.orden);
-        $(`[name="titulo"]`).val(data.titulo);
-        $("#card-img").attr("src",`{{ url('/') }}/${data.img}`);
     }
     elmnt = document.getElementById("form");
     elmnt.scrollIntoView();
@@ -193,8 +171,14 @@ readURL = function(input) {
 };
 addDelete = function(t) {
     addFamilia($("#btnADD"));
-    $(`[name="orden"],[name="img"],[name="titulo"]`).val("");
-    $("#card-img").attr("src","");
+    $(`input`).val("");
 };
+init = function() {
+    console.log("CONSTRUYENDO FORMULARIO")
+    /** */
+    $("#form .container-form").html(window.seccion.formulario());
+}
+/** */
+init();
 </script>
 @endpush

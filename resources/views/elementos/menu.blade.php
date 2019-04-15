@@ -5,7 +5,7 @@
     <div class="w-100 position-absolute">
         <ul class="list-unstyled components m-0 p-0">
             <li class="">
-                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-home"></i>Home</a>
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-home"></i>Home OK</a>
                 <ul class="collapse list-unstyled" id="homeSubmenu">
                     <li>
                         <a  href="{{ route('contenido.edit', ['seccion' => 'home'])}}">Contenido</a>
@@ -16,7 +16,7 @@
                 </ul>
             </li>
             <li>
-            <a href="#nosotrosSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-building"></i>Nosotros</a>
+            <a href="#nosotrosSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-building"></i>Nosotros OK</a>
                 <ul class="collapse list-unstyled" id="nosotrosSubmenu">
                     <li>
                         <a href="{{ route('contenido.edit', ['seccion' => 'nosotros'])}}">Contenido</a>
@@ -24,13 +24,13 @@
                 </ul>
             </li>
             <li>
-            <a href="#calidadSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-feather-alt"></i>calidad</a>
+            <a href="#calidadSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-feather-alt"></i>calidad OK</a>
                 <ul class="collapse list-unstyled" id="calidadSubmenu">
                     <li>
                         <a href="{{ route('contenido.edit', ['seccion' => 'calidad'])}}">Contenido</a>
                     </li>
                     <li>
-                        <a href="{{ route('contenido.edit', ['seccion' => 'calidad'])}}">Archivos</a>
+                        <a href="{{ route('archivo.index', ['seccion' => 'calidad'])}}">Archivos</a>
                     </li>
                 </ul>
             </li>
@@ -43,13 +43,13 @@
                 </ul>
             </li>
             <li>
-                <a href="#prensaSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-newspaper"></i>Prensa</a>
+                <a href="#prensaSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-newspaper"></i>Prensa OK</a>
                 <ul class="collapse list-unstyled" id="prensaSubmenu">
                     <li>
                         <a href="{{ route('contenido.edit', ['seccion' => 'prensa'])}}">Contenido</a>
                     </li>
                     <li>
-                        <a href="{{ route('contenido.edit', ['seccion' => 'prensa'])}}">Archivos</a>
+                        <a href="{{ route('archivo.index', ['seccion' => 'prensa'])}}">Archivos</a>
                     </li>
                 </ul>
             </li>
@@ -60,20 +60,20 @@
                         <a href="{{ route('familia.index')}}">Familia de Trabajos</a>
                     </li>
                     <li>
-                        <a href="{{ route('familia.producto.index')}}">Todos los Trabajos</a>
+                        <a href="{{ route('familia.trabajo.index')}}">Todos los Trabajos</a>
                     </li>
                 </ul>
             </li>
             <li>
-                <a href="#rrhhSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-id-card"></i>RR.HH.</a>
+                <a href="#rrhhSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-id-card"></i>RR.HH. OK</a>
                 <ul class="collapse list-unstyled" id="rrhhSubmenu">
                     <li>
-                        <a href="{{ route('contenido.edit', ['seccion' => 'rrhh'])}}">Listado de trabajos</a>
+                        <a href="{{ route('rrhh.index')}}">Listado de trabajos</a>
                     </li>
                 </ul>
             </li>
             <li>
-                <a href="#clientesSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-users"></i>Clientes</a>
+                <a href="#clientesSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-users"></i>Clientes OK</a>
                 <ul class="collapse list-unstyled" id="clientesSubmenu">
                     <li>
                         <a href="{{ route('cliente.index')}}">Todos los clientes</a>

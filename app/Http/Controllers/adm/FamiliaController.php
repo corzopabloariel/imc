@@ -39,34 +39,19 @@ class FamiliaController extends Controller
     public function store(Request $request, $data = null)
     {
         $datosRequest = $request->all();
-        $model = new Familia();
+        
         $ARR_data = [];
-        foreach($model->getFillable() AS $f) {
-            if($f == "img") {
-                $file = $request->file($f);
-                if(is_null($file))
-                    continue;
-                $path = public_path('images/familias/');
-                if (!file_exists($path))
-                    mkdir($path, 0777, true);
-                
-                $imageName = time().'.'.$file->getClientOriginalExtension();
-                $file->move($path, $imageName);
-                $ARR_data[$f] = "images/familias/{$imageName}";
-                continue;
-            }
-            if(isset($datosRequest[$f]))
-                $ARR_data[$f] = $datosRequest[$f];
-        }
+        $ARR_data["orden"] = $datosRequest["orden"];
+        $ARR_data["nombre"] = [];
+        $ARR_data["nombre"]["esp"] = null;
+        $ARR_data["nombre"]["ing"] = null;
+        $ARR_data["nombre"]["ita"] = null;
+        foreach($ARR_data["nombre"] AS $k => $v)
+            $ARR_data["nombre"][$k] = $datosRequest["nombre_{$k}"];
+        $ARR_data["nombre"] = json_encode($ARR_data["nombre"]);
         if(is_null($data))
             Familia::create($ARR_data);
         else {
-            
-            if(isset($data["img"])) {
-                $filename = public_path() . "/" . $data["img"];
-                if (file_exists($filename))
-                    unlink($filename);
-            }
             $data->fill($ARR_data);
             $data->save();
         }

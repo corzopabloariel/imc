@@ -59,7 +59,6 @@ class SliderController extends Controller
             $ARR_data["image"] = "images/sliders/{$seccion}/{$imageName}";
         }
         
-        
         if(is_null($data))
             Slider::create($ARR_data);
         else {

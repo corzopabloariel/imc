@@ -1,6 +1,6 @@
 @extends('elementos.main')
 
-@section('headTitle', $title. ' | GDS')
+@section('headTitle', $title. ' | IMC')
 @section('bodyTitle', $title)
 
 @section('body')
@@ -19,119 +19,13 @@
                     </button>
                     <form id="form" novalidate class="pt-2" action="{{ url('/adm/familia/producto/store') }}" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                        <div class="row justify-content-md-center">
-                            <div class="col-md-6">
-                                <input placeholder="Título" name="titulo" type="text" class="form-control" value=""/>
-                                <fieldset class="bg-light">
-                                    <legend>Descripción</legend>
-                                    <textarea placeholder="Texto" id="descripcion" name="descripcion" class="validate ckeditor w-100"></textarea>
-                                </fieldset>
-                                <fieldset class="bg-light">
-                                    <legend>Detalle</legend>
-                                    <textarea placeholder="detalle" id="detalle" name="detalle" class="validate ckeditor w-100"></textarea>
-                                </fieldset>
+                        <div class="row mb-2 justify-content-center">
+                            <div class="col-12 text-center">
+                                <button type="button" onclick="imageAdd()" class="btn btn-dark">Agregar imagen <small>612x396</small></button>
                             </div>
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <input placeholder="Orden" maxlength="3" name="orden" type="text" class="form-control text-uppercase text-center"/>
-                                    </div>
-                                    <div class="col-6">
-                                        <button type="submit" class="btn btn-block btn-success mr-1"><i class="fas fa-check"></i></button>
-                                    </div>
-                                </div>
-                                <div class="row mt-4">
-                                    <div class="col-12">
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <label class="input-group-text" for="familia">Familia de productos</label>
-                                            </div>
-                                            <select class="custom-select" name="familia_id" id="familia_id">
-                                                @foreach ($familias as $id => $v)
-                                                    <option value="{{$id}}">{{$v}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mt-4">
-                                    <div class="col-12">
-                                        <div class="custom-file">
-                                            <input required type="file" name="especificaciones" accept="application/pdf,image/jpeg" class="custom-file-input" lang="es">
-                                            <label data-invalid="Seleccione especificaciones" data-valid="Archivo seleccionado" class="custom-file-label mb-0" data-browse="Buscar" for="customFileLang"></label>
-                                        </div>
-                                        <small class="form-text text-muted">
-                                        Acepta archivos con extensión PDF y JPG
-                                        </small>
-                                    </div>
-                                </div>
-                                <div class="row mt-4">
-                                    <div class="col-12">
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <label class="input-group-text" for="familia">Productos relacionados</label>
-                                            </div>
-                                            <select class="custom-select" name="productos[]" id="productos" multiple>
-                                                @foreach ($productos as $p)
-                                                    <option value="{{$p['id']}}">{{$p["titulo"]}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <small class="form-text text-muted">
-                                        CTRL + click para seleccionar más elementos
-                                        </small>
-                                    </div>
-                                </div>
-                                <div class="row mt-4">
-                                    <div class="col-12">
-                                        <fieldset class="position-relative bg-light">
-                                            <div class="input-group position-relative">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text" id="basic-addon3">youtube.com/watch?v=</span>
-                                                </div>
-                                                <input value="" type="text" class="form-control" name="video" aria-describedby="basic-addon3">
-                                                <i onclick="link(this);" class="position-absolute link-video fab fa-youtube"></i>
-                                            </div>
-                                        </fieldset>
-                                    </div>
-                                </div>
-                                <div class="row mt-4">
-                                    <div class="col-12">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="destacado" value="1" id="defaultCheck1">
-                                            <label class="form-check-label" for="defaultCheck1">
-                                                Producto destacado?
-                                            </label>
-                                        </div>
-                                        <small class="form-text text-muted">
-                                        Aperecerá en el HOME
-                                        </small>
-                                    </div>
-                                </div>
-                                <hr/>
-                                <div class="row mt-4">
-                                    <div class="col-12">
-                                        <fieldset>
-                                            <legend class="legend-btn"><button id="btnCaracteristicas" type="button" onclick="addOpciones(this)" class="btn btn-dark">Características <i class="fas fa-plus"></i></button></legend>
-                                            <div id="wrapper-opciones">
-                                            </div>
-                                            <small class="text-muted">Arrestre los elementos para ordernar</small>
-                                        </fieldset>
-                                    </div>
-                                </div>
-                                <div class="row mt-4">
-                                    <div class="col-12">
-                                        <fieldset>
-                                            <legend class="legend-btn"><button id="btnImagenes" type="button" onclick="addImagenes(this)" class="btn btn-dark">Imágenes <i class="fas fa-plus"></i></button></legend>
-                                            <div id="wrapper-imagenes">
-                                            </div>
-                                            <small class="text-muted">Arrestre los elementos para ordernar. La primera imagen será la portada</small>
-                                        </fieldset>
-                                    </div>
-                                </div>
-                            </div>
-                            
                         </div>
+                        <div class="container-form-image row"></div>
+                        <div class="container-form mt-2"></div>
                     </form>
                 </div>
             </div>
@@ -146,28 +40,25 @@
                         <th class="text-uppercase">acción</th>
                     </thead>
                     <tbody>
-                        @if(count($productos) != 0)
-                            @foreach($productos AS $producto)
+                        @if(count($trabajos) != 0)
+                            @foreach($trabajos AS $trabajo)
                                 @php
-                                $producto["imagenes"] = $producto->imagenes;
+                                $trabajo["imagenes"] = $trabajo->imagenes;
                                 $img = null;
-                                $familia = App\Familia::find($producto["familia_id"]);
-                                if(isset($producto["imagenes"][0])) 
-                                    $img = asset($producto["imagenes"][0]["img"]) . "?t=" . time();
+
+                                if(count($trabajo["imagenes"]) > 0)
+                                    $img = asset('/').$trabajo['imagenes'][0]['image'];
+                                $nombre = "{$trabajo["nombre"]} - {$trabajo["ubicacion"]}";
                                 @endphp
-                                <tr data-id="{{ $producto['id'] }}">
-                                    <td class="text-uppercase">{!! $producto["orden"] !!}</td>
+                                <tr data-id="{{ $trabajo['id'] }}">
+                                    <td class="text-uppercase">{!! $trabajo["orden"] !!}</td>
                                     <td><img onError="this.src='{{ asset('images/general/no-img.png') }}'" src="{{ $img }}" /></td>
                                     <td>
-                                        @if($producto["destacado"])
-                                            <i class="fas fa-star text-warning mr-2" title="Destacado"></i>
-                                        @endif
-                                        {!! $producto["titulo"] !!}
-                                        <small class="ml-2">{{$familia["titulo"]}}</small>
+                                        {!! $nombre !!}
                                     </td>
                                     <td>
-                                        <button type="button" onclick="editProducto({{ $producto['id'] }}, this)" class="btn btn-warning mr-1"><i class="fas fa-pencil-alt"></i></button>
-                                        <button type="button" onclick="deleteProducto({{ $producto['id'] }}, this)" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                                        <button type="button" onclick="editProducto({{ $trabajo['id'] }}, this)" class="btn btn-warning mr-1"><i class="fas fa-pencil-alt"></i></button>
+                                        <button type="button" onclick="deleteProducto({{ $trabajo['id'] }}, this)" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -197,6 +88,10 @@
             CKEDITOR.replace( $(this).attr("name") );
         });
     });
+    let dataPYRUS = {familia_id: {TIPO:"JSON",DATA:@JSON($familias)}};
+    
+    window.seccion = new Pyrus("trabajo", dataPYRUS);
+    window.seccionImage = new Pyrus("trabajoimagen");
     addProducto = function(t, id = 0, data = null) {
         let btn = $(t);
         if(btn.is(":disabled"))
@@ -333,7 +228,7 @@
             var reader = new FileReader();
 
             reader.onload = function (e) {
-                $(target).attr(`src`,`${e.target.result}`);
+                $(`#${target}`).attr(`src`,`${e.target.result}`);
             };
             reader.readAsDataURL(input.files[0]);
             $(`${target}`).parent().find("input[type='hidden']").val(0);
@@ -391,5 +286,21 @@
         placeholder: "sortable-placeholder",
         cursor: "move"
     }).disableSelection();
+
+    imageAdd = function() {
+        if(window.countImage === undefined) window.countImage = 0;
+        window.countImage ++;
+        let imgAUX = "{{ asset('images/general/no-img.png') }}";
+        let img = `<img id="src_image_${window.countImage}" src="" onError="this.src='${imgAUX}'" class="w-100 d-block mb-1 rounded img-thumbnail"/>`;
+        
+        $("#form .container-form-image").append(`<div class="col-12 col-md-4 my-2">${img}${window.seccionImage.formulario(window.countImage,1)}</div>`);
+    }
+    init = function() {
+        console.log("CONSTRUYENDO FORMULARIO")
+        /** */
+        $("#form .container-form").html(window.seccion.formulario());
+    }
+    /** */
+    init();
 </script>
 @endpush

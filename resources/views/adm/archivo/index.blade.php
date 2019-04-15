@@ -8,16 +8,18 @@
 
 <section class="mt-3">
     <div class="container-fluid">
+        @if(count($archivos) != 2)
         <div>
-            <button id="btnADD" onclick="addCliente(this)" class="btn btn-primary text-uppercase" type="button">Agregar<i class="fas fa-plus ml-2"></i></button>
+            <button id="btnADD" onclick="addArchivo(this)" class="btn btn-primary text-uppercase" type="button">Agregar<i class="fas fa-plus ml-2"></i></button>
         </div>
+        @endif
         <div style="display: none;" id="wrapper-form" class="mt-2">
             <div class="card">
                 <div class="card-body">
                     <button onclick="addDelete(this)" type="button" class="close" aria-label="Close">
                         <span aria-hidden="true"><i class="fas fa-times"></i></span>
                     </button>
-                    <form id="form" novalidate class="pt-2" action="{{ url('/adm/rrhh/store') }}" method="post" enctype="multipart/form-data">
+                    <form id="form" novalidate class="pt-2" action="{{ url('/adm/archivo/store/'. $seccion) }}" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                         <div class="container-form"></div>
                     </form>
@@ -28,33 +30,30 @@
             <div class="card-body">
                 <table class="table mt-2 mb-0" id="tabla">
                     <thead class="thead-dark">
-                        <th class="text-uppercase text-center">Orden</th>
-                        <th class="text-uppercase">Información</th>
-                        <th class="text-uppercase text-center">acción</th>
+                        <th class="text-uppercase text-center" style="width: 100px;">Orden</th>
+                        <th class="text-uppercase">Documento</th>
+                        <th class="text-uppercase text-center" style="width: 150px;">acción</th>
                     </thead>
                     <tbody>
-                        @if(count($trabajos) != 0)
-                            @foreach($trabajos AS $trabajo)
+                        @if(count($archivos) != 0)
+                            @foreach($archivos AS $archivo)
                                 @php
-                                $data = json_decode($trabajo["data"], true);
-                                $dataTD = "";
-                                $idiomas = ["esp" => "español","ing" => "inglés","ita"=>"italiano"];
-                                foreach($data AS $k => $v) {
-                                    $dataTD .= '<fieldset>';
-                                        $dataTD .= "<legend>{$idiomas[$k]}</legend>";
-                                        $dataTD .= "<p><strong>Nombre</strong> {$v["nombre"]}</p>";
-                                        $dataTD .= "<p><strong>Edades</strong> {$v["rango"]}</p>";
-                                        $dataTD .= "<p><strong>Orientación</strong> {$v["orientacion"]}</p>";
-                                        $dataTD .= "<p><strong>Experiencia</strong> {$v["experiencia"]}</p>";
-                                    $dataTD .= '</fieldset>';
+                                $documentosTD = "";
+                                $documentos = json_decode($archivo["documento"], true);
+                                $nombres = json_decode($archivo["nombre"], true);
+                                
+                                foreach($documentos AS $i => $d) {
+                                    $href = asset('/').$documentos[$i];
+                                    $nombre = $nombres[$i];
+                                    $documentosTD .= "<p class='mb-0'><a target='blank' href='{$href}'>{$nombre}<i class='fas fa-external-link-alt ml-2'></i></a></p>";
                                 }
                                 @endphp
-                                <tr data-id="{{ $trabajo['id'] }}">
-                                    <td class="text-uppercase text-center">{!! $trabajo["orden"] !!} - {{ $trabajo["provincia"] }}</td>
-                                    <td>{!! $dataTD !!}</td>
+                                <tr data-id="{{ $archivo['id'] }}">
+                                    <td class="text-uppercase text-center">{!! $archivo["orden"] !!}</td>
+                                    <td>{!! $documentosTD !!}</td>
                                     <td class="text-center">
-                                        <button type="button" onclick="editCliente({{ $trabajo['id'] }}, this)" class="btn btn-warning mr-1"><i class="fas fa-pencil-alt"></i></button>
-                                        <button type="button" onclick="deleteCliente({{ $trabajo['id'] }}, this)" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                                        <button type="button" onclick="editArchivo({{ $archivo['id'] }}, this)" class="btn btn-warning mr-1"><i class="fas fa-pencil-alt"></i></button>
+                                        <button type="button" onclick="deleteArchivo({{ $archivo['id'] }}, this)" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -82,11 +81,11 @@ $(document).on("ready",function() {
         CKEDITOR.replace( $(this).attr("name") );
     });
 });
-window.seccion = new Pyrus("rrhh");
-deleteCliente = function(id, t) {
+window.seccion = new Pyrus("archivo");
+deleteArchivo = function(id, t) {
     $(t).attr("disabled",true);
     let promise = new Promise(function (resolve, reject) {
-        let url = `{{ url('/adm/cliente/delete') }}/${id}`;
+        let url = `{{ url('/adm/archivo/delete') }}/${id}`;
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.open( "GET", url, true );
         
@@ -107,10 +106,10 @@ deleteCliente = function(id, t) {
     };
     promiseFunction();
 };
-editCliente = function(id, t) {
+editArchivo = function(id, t) {
     $(t).attr("disabled",true);
     let promise = new Promise(function (resolve, reject) {
-        let url = `{{ url('/adm/rrhh/edit') }}/${id}`;
+        let url = `{{ url('/adm/archivo/edit') }}/${id}`;
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.responseType = 'json';
         xmlHttp.open( "GET", url, true );
@@ -124,12 +123,12 @@ editCliente = function(id, t) {
         promise
             .then(function(data) {
                 $(t).removeAttr("disabled");
-                addCliente($("#btnADD"),parseInt(id),data);
+                addArchivo($("#btnADD"),parseInt(id),data);
             })
     };
     promiseFunction();
 };
-addCliente = function(t, id = 0, data = null) {
+addArchivo = function(t, id = 0, data = null) {
     let btn = $(t);
     if(btn.is(":disabled"))
         btn.removeAttr("disabled");
@@ -140,17 +139,17 @@ addCliente = function(t, id = 0, data = null) {
     $("#wrapper-tabla").toggle("fast");
 
     if(id != 0)
-        action = `{{ url('/adm/rrhh/update/') }}/${id}`;
+        action = `{{ url('/adm/archivo/update/') }}/${id}`;
     else
-        action = "{{ url('/adm/rrhh/store') }}";
+        action = "{{ url('/adm/archivo/store/'. $seccion) }}";
     if(data !== null) {
-        data.data = JSON.parse(data.data);
+        data.nombre = JSON.parse(data.nombre);
+        data.documento = JSON.parse(data.documento);
+        console.log(data)
         $(`[name="orden"]`).val(data.orden);
-        $(`[name="provincia"]`).val(data.provincia);
-        for(let x in data.data) {
-            for(let y in data.data[x])
-                $(`[name="${y}_${x}"]`).val(data.data[x][y]);
-        }
+        $(`[name="nombre_esp"]`).val(data.nombre.esp);
+        $(`[name="nombre_ing"]`).val(data.nombre.ing);
+        $(`[name="nombre_ita"]`).val(data.nombre.ita);
     }
     elmnt = document.getElementById("form");
     elmnt.scrollIntoView();
@@ -167,9 +166,8 @@ readURL = function(input) {
     }
 };
 addDelete = function(t) {
-    addCliente($("#btnADD"));
-    $(`input[type="text"]`).val("");
-    $(`select[name="provincia"]`).val($(`select[name="provincia"] option:first-child`).val()).trigger("change");
+    addArchivo($("#btnADD"));
+    $(`input`).val("");
 };
 init = function() {
     console.log("CONSTRUYENDO FORMULARIO")

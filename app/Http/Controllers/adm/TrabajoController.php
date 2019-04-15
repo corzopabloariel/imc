@@ -4,11 +4,10 @@ namespace App\Http\Controllers\adm;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Producto;
-use App\Productosimg;
+use App\Trabajo;
+use App\Trabajoimagen;
 use App\Familia;
-use App\Proyecto;
-class ProductoController extends Controller
+class TrabajoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,10 +16,10 @@ class ProductoController extends Controller
      */
     public function index()
     {
-        $title = "Productos";
-        $productos = Producto::orderBy('orden')->get();
-        $familias = Familia::orderBy('orden')->pluck('titulo', 'id');
-        return view('adm.familia.producto',compact('title','productos','familias'));
+        $title = "Trabajos";
+        $trabajos = Trabajo::orderBy('orden')->get();
+        $familias = Familia::orderBy('orden')->pluck('nombre', 'id');
+        return view('adm.familia.trabajo',compact('title','trabajos','familias'));
     }
 
     /**
