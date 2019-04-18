@@ -1,22 +1,20 @@
-<section class="wrapper-clientes py-5">
-    <div class="container">
-        <div class="row py-3">
-            <div class="col-12">
-                <h3 class="title">Clientes</h3>
-            </div>
-        </div>
-        <div class="row py-3">
-            <div class="col-12">
-                {!! $contenido["texto"] !!}
-            </div>
-        </div>
-        <div class="row listado m-0">
-            @foreach ($contenido["listado"] as $v)
-                <div class="col-md-3 col-12 my-3 p-0">
-                    <img src="{{asset($v['img'])}}" class="w-100" />
-                    <p class="mb-0 text-center">{{$v["nombre"]}}</p>
+<div style="padding-top: 50px; padding-bottom: 50px" class="wrapper-clientes" id="scroll-cliente">
+    <h4 class="title text-uppercase text-center">{{trans('words.menu.clients')}}</h4>
+    <div class="container position-relative">
+        <div class="row justify-content-center">
+            <div class="col-11">
+                {{-- <button class="slick-prev slick-arrow" aria-label="Previous" type="button" style="display: block;">Previous</button> --}}
+                <div class="regular slider" id="clientes">
+                    @foreach($clientes AS $c)
+                    <div>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <img src="{{ asset('/')}}{{$c}}">
+                        </div>
+                    </div>
+                    @endforeach
                 </div>
-            @endforeach
+                {{--<button class="slick-next slick-arrow" aria-label="Next" type="button" style="display: block;">Next</button>--}}
+            </div>
         </div>
     </div>
-</section>
+</div>

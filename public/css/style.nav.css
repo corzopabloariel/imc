@@ -1,0 +1,25 @@
+/* # */
+.sidenav {
+    background-color: #ffffff !important;
+    color: #53411C;
+}
+.sidenav i {
+    color: #D7BE89;
+}
+.sidenav-img { 
+    position: relative;
+    width: auto;
+    height: 100px;
+    display: block;
+    margin: 20px auto;
+}
+.nav-logout {
+    padding: 1em 0;
+    color: #fff;
+    background-color: #000000;
+    border-color: #000000;
+}
+.espacio-nav {
+    margin-left: 300px;
+    width: calc(100% - 300px);
+}

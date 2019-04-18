@@ -11,7 +11,13 @@
 |
 */
 
-Route::get('/', ['uses' => 'page\GdsController@index', 'as' => 'index']);
+Route::get('/', ['uses' => 'page\GdsController@redirect', 'as' => 'redirect']);
+Route::group(['prefix' => 'index', 'as' => 'index'], function() {
+    Route::get('{idioma}', [ 'uses' => 'page\GdsController@index', 'as' => 'index' ]);
+    
+});
+Route::get('{idioma}/rrhh/{id}', [ 'uses' => 'page\GdsController@rrhh', 'as' => 'rrhh' ]);
+Route::get('{idioma}/servicio/{id}', [ 'uses' => 'page\GdsController@servicio', 'as' => 'servicio' ]);
 
 Auth::routes();
 
@@ -69,9 +75,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
     });
 
     /**
-     * PROYECTOS
+     * SERVICIO
      */
-    Route::group(['prefix' => 'servicio', 'as' => 'servicio'], function() {
+    Route::group(['prefix' => 'servicios', 'as' => 'servicios'], function() {
         Route::get('index', ['uses' => 'adm\ServicioController@index', 'as' => '.index']);
         Route::post('store', ['uses' => 'adm\ServicioController@store', 'as' => '.store']);
         Route::get('edit/{id}', ['uses' => 'adm\ServicioController@edit', 'as' => '.edit']);
