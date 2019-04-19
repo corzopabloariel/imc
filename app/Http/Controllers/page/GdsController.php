@@ -126,8 +126,29 @@ class GdsController extends Controller
         $empresa = self::empresa();
         $servicio = Servicio::find($id);
         $servicio["data"] = json_decode($servicio["data"], true)[$languages];
-        
         return view('page.servicio',compact('empresa','languages','idioma','servicio'));
+    }
+
+    public function prensa($idioma) {
+        if($idioma == "es") {
+            App::setLocale('es');
+            $languages = "esp";
+        } else if($idioma == "it") {
+            App::setLocale('it');
+            $languages = "ita";
+        } else {
+            App::setLocale('en');
+            $languages = "ing";
+        }
+        $empresa = self::empresa();
+        $prensa = json_decode(Contenido::where('seccion','prensa')->first()["data"], true)[$languages];
+        
+        $archivosPrensa = Archivo::where('seccion','prensa')->orderBy('orden')->get();
+        foreach($archivosPrensa AS $p) {
+            $p["nombre"] = json_decode($p["nombre"], true)[$languages];
+            $p["documento"] = json_decode($p["documento"], true)[$languages];
+        }
+        return view('page.prensa',compact('empresa','languages','idioma','prensa','archivosPrensa'));
     }
 
     public function datosEmpresa() {

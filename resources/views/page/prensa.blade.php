@@ -28,59 +28,30 @@
                 </div>
             </div>
         @endif
-        @include('page.elementos.navLateral')
-        <nav class="w-100 nav" id="nav">
-            <div class="nav-wrapper">
-                @php $url = "prensa"; @endphp
-                @include('page.elementos.idiomas')
-
-                <div style="height: inherit" class="container-fluid position-relative d-flex justify-content-end align-items-end">
-                    <a href="{{ URL::to( 'index/' . $idioma ) }}" class="brand-logo">
-                        <img src="{{ asset('/')}}{{$empresaimagen['data']->logo }}"/>
-                    </a>
-                    <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-                    <ul id="nav-mobile" class="hide-on-med-and-down text-uppercase navbar">
-                        <span></span>
-                        <li><a href="{{ URL::to( 'index/' . $idioma ) }}" data-scroll="nav">{{trans('words.menu.home')}}</a></li>
-                        <li><a href="{{ URL::to( 'index/' . $idioma ) }}" data-scroll="scroll-nosotros">{{trans('words.menu.us')}}</a></li>
-                        <li><a href="{{ URL::to( 'index/' . $idioma ) }}" data-scroll="scroll-servicio">{{trans('words.menu.services')}}</a></li>
-                        <li><a class="activeImportat" data-scroll="scroll-prensa">{{trans('words.menu.press')}}</a></li>
-                        <li><a href="{{ URL::to( 'index/' . $idioma ) }}" data-scroll="scroll-portfolio">{{trans('words.menu.portfolio')}}</a></li>
-                        <li><a href="{{ URL::to( 'index/' . $idioma ) }}" data-scroll="scroll-rrhh">{{trans('words.menu.rrhh')}}</a></li>
-                        <li><a href="{{ URL::to( 'index/' . $idioma ) }}" data-scroll="scroll-cliente">{{trans('words.menu.clients')}}</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
         
-        <div style="padding: 50px 0;" class="servicio container-fluid div_contenedor">
-            <h4 style="padding-bottom:25px" class="position-relative text-uppercase text-center title">
-                <small style="left: 0; font-size: 14px; font-weight: normal" class="position-absolute navbar"><a style="color: #D7BE89 !important" href="{{ URL::to( 'index/' . $idioma ) }}" data-scroll="scroll-contacto">« Volver</a></small>
-                <span class="d-inline-block">{{trans('words.menu.press')}}<hr/></span>
-            </h4>
-            <section>
+        @include('page.elementos.navLateral')
+        @include('page.element.nav')
+        
+        @include('page.element.navModal')
+        
+        <div style="padding: 174px 0 60px 0;" class="wrapper-servicio">
+            <div class="container">
+                <h4 style="padding-bottom:25px" class="position-relative text-uppercase text-center title">
+                    <small class="position-absolute volver navbar"><a style="color: #D7BE89 !important" href="{{ URL::to( 'index/' . $idioma ) }}" data-scroll="scroll-contacto">« Volver</a></small>
+                    {{trans('words.menu.press')}}
+                </h4>
                 <div class="hide-on-small-only">
                     <div class="row">
-                        <div class="col s6 d-flex flex-column align-items-end">
-                            <div class="text-center">
-                                <img style="margin: auto; display:block;" src="{{ asset('/images/general/brochure.fw.png')}}"/>
+                        <div class="col-6">
+                            <div class="d-flex flex-column">
+                                <img class="d-block mx-auto" style="height: 128px" src="{{ asset('/images/general/brochure.fw.png')}}"/>
+                                <img class="d-block mx-auto mt-4" style="cursor: pointer;" onclick="verificar(this,'brochure');" src="{{ asset('/images/general/btn_brochure.fw.png')}}"/>
                             </div>
                         </div>
-                        <div class="col s6 d-flex flex-column align-items-start">
-                            <div class="text-center">
-                                <img style="margin: auto; display:block;" src="{{ asset('/images/general/imc.fw.png')}}"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s6 d-flex flex-column align-items-end">
-                            <div class="text-center">
-                                <img style="margin: auto; display:block; cursor: pointer;" onclick="verificar(this,'brochure');" src="{{ asset('/images/general/btn_brochure.fw.png')}}"/>
-                            </div>
-                        </div>
-                        <div class="col s6 d-flex flex-column align-items-start">
-                            <div class="text-center">
-                                <img style="margin: auto; display:block; cursor: pointer;" onclick="verificar(this,'imc');" src="{{ asset('/images/general/btn_imc.fw.png')}}"/>
+                        <div class="col-6">
+                            <div class="d-flex flex-column">
+                                <img class="d-block mx-auto" style="height: 128px" src="{{ asset('/images/general/imc.fw.png')}}"/>
+                                <img class="d-block mx-auto mt-4" style="cursor: pointer;" onclick="verificar(this,'imc');" src="{{ asset('/images/general/btn_imc.fw.png')}}"/>
                             </div>
                         </div>
                     </div>
@@ -106,7 +77,7 @@
                     </div>
                 </div>--}}
                 <div class="d-flex justify-content-center" id="formulario"></div>
-            </section>
+            </div>
         </div>
         @include('page.elementos.footer')
         

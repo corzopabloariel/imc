@@ -31,15 +31,16 @@
         
         @include('page.elementos.navLateral')
         @include('page.element.nav')
+        @include('page.element.navModal')
         
-        <div style="padding: 174px 0 60px 0;" class="wrapper-oferta container">
-            <div class="row justify-content-center">
-                <div class="col-md-8 col-12">
-                    <h4 style="padding-bottom:25px; font-size: 30px;" class="position-relative text-uppercase text-center title">
-                        <small style="left: 0; font-size: 14px; font-weight: normal" class="position-absolute"><a style="color: #D7BE89 !important" href="{{ URL::to( 'index/' . $idioma ) }}">« Volver</a></small>
-                        {{trans('words.rrhh')}}
-                    </h4>
-                    <section>
+        <div style="padding: 174px 0 60px 0;" class="wrapper-oferta">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8 col-12">
+                        <h4 style="padding-bottom:25px; font-size: 30px;" class="position-relative text-uppercase text-center title">
+                            <small class="position-absolute volver"><a style="color: #D7BE89 !important" href="{{ URL::to( 'index/' . $idioma ) }}">« Volver</a></small>
+                            {{trans('words.rrhh')}}
+                        </h4>
                         <form action="{{ url('/envio/') }}/{{$oferta['id']}}" method="post" enctype="multipart/form-data">
                             @method('POST')
                             
@@ -71,7 +72,8 @@
                                 </div>
                             </div>
                         </form>
-                    </section>
+                        
+                    </div>
                 </div>
             </div>
         </div>

@@ -28,35 +28,6 @@
                 </div>
             </div>
         @endif
-        <div id="menuNav" class="modal show fade menuNav" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-modal="true" style="padding-right: 17px; display: block;">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content border-top-0 border-left-0 border-bottom-0">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Menú</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <ul class="list-group list-group-flush">
-
-                            <li class="list-group-item text-uppercase"><a class="activeImportat" href="#" data-scroll="nav">{{trans('words.menu.home')}}</a></li>
-                            <li class="list-group-item text-uppercase"><a href="#" data-scroll="scroll-nosotros">{{trans('words.menu.us')}}</a></li>
-                            <li class="list-group-item text-uppercase"><a href="#" data-scroll="scroll-servicio">{{trans('words.menu.services')}}</a></li>
-                            <li class="list-group-item text-uppercase"><a href="#" data-scroll="scroll-prensa">{{trans('words.menu.press')}}</a></li>
-                            <li class="list-group-item text-uppercase"><a href="#" data-scroll="scroll-portfolio">{{trans('words.menu.portfolio')}}</a></li>
-                            <li class="list-group-item text-uppercase"><a href="#" data-scroll="scroll-rrhh">{{trans('words.menu.rrhh')}}</a></li>
-                            <li class="list-group-item text-uppercase"><a href="#" data-scroll="scroll-cliente">{{trans('words.menu.clients')}}</a></li>
-                            {{--<li class="list-group-item text-uppercase"><a href="#" data-scroll="scroll-contacto">{{trans('words.menu.contact')}}</a></li>--}}
-                        </ul>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="modal fade bd-example-modal-xl" id="modal">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
@@ -88,6 +59,7 @@
                 <li data-title="{{trans('words.menu.contact')}}"><a href="#" data-scroll="scroll-contacto"></a></li>
             </ul>
         </div>
+        @include('page.element.navModal')
         <section>
             @include('page.element.home')
             @include('page.elementos.navLateral')
@@ -155,6 +127,9 @@
                 });
                 $(window).on('orientationchange', function () {
                     $('.js-slider').not('.slick-initialized').slick('resize');
+
+                    if(window.outerWidth <= 425)
+                        $("#clientes .slick-arrow").addClass("d-none");
                 });
                 $(".tipo.row").find("> .col:first-child()").addClass("active");
 
@@ -176,20 +151,15 @@
                     elmnt = document.getElementById(localStorage.scroll);
                     elmnt.scrollIntoView();
                     
-                    localStorage.removeItem("scroll")
+                    if(localStorage.scroll == "scroll-servicio") {
+                        $(`[data-tipoServicio="${localStorage.tipoServicio}"]`).click();
+                        localStorage.removeItem("tipoServicio");
+                    }
+                    localStorage.removeItem("scroll");
                 }
                 
-                let slide = 4;
-                let dots = false;
-                if(window.outerWidth <= 320) {
-                    slide = 1;
-                }
-                if(window.outerWidth <= 425) {
-                    slide = 2;
-                    dots = true;
-                }
                 let slickClientes = $("#clientes").slick({
-                    dots: dots,
+                    dots: false,
                     infinite: true,
                     slidesToShow: 4,
                     slidesToScroll: 1,
@@ -213,7 +183,8 @@
                             breakpoint: 425,
                             settings: {
                                 slidesToShow: 1,
-                                slidesToScroll: 1
+                                slidesToScroll: 1,
+                                dots: true
                             }
                         }
                     ]
@@ -225,6 +196,9 @@
                     manualControls: "#sliderOfertas"
                     // speed: 800
                 });
+
+                if(window.outerWidth <= 425)
+                    $("#clientes .slick-arrow").addClass("d-none");
             });
             
             portfolioFamilia = function(t) {
@@ -238,7 +212,9 @@
             
             $('a[data-scroll]').on("click", function (e) {
                 e.preventDefault();
-                target = $(this).data("scroll")
+                if($("#menuNav").is(":visible"))
+                    $("#menuNav").modal("hide");
+                target = $(this).data("scroll");
                 position = $(`#${target}`).position();
                 scroll = position.top - 124;
                 if(scroll < 0) scroll = 0;
@@ -263,8 +239,8 @@
                     $("#menu-lateral").removeClass("d-none");
                     $("#menu-lateral").find(".active").removeClass("active");
                     $("#menu-lateral *[data-scroll='scroll-nosotros']").addClass("active");
-                    $("nav").find(".activeImportat").removeClass("activeImportat");
-                    $("nav").find('[data-scroll="scroll-nosotros"]').addClass("activeImportat");
+                    $("nav,#menuNav").find(".activeImportat").removeClass("activeImportat");
+                    $("nav,#menuNav").find('[data-scroll="scroll-nosotros"]').addClass("activeImportat");
                 },
                 offset: 124
             });
@@ -274,8 +250,8 @@
                     $("#menu-lateral").removeClass("d-none");
                     $("#menu-lateral").find(".active").removeClass("active");
                     $("#menu-lateral *[data-scroll='scroll-servicio']").addClass("active");
-                    $("nav").find(".activeImportat").removeClass("activeImportat");
-                    $("nav").find('[data-scroll="scroll-servicio"]').addClass("activeImportat");
+                    $("nav,#menuNav").find(".activeImportat").removeClass("activeImportat");
+                    $("nav,#menuNav").find('[data-scroll="scroll-servicio"]').addClass("activeImportat");
                 },
                 offset: 124
             });
@@ -285,8 +261,8 @@
                     $("#menu-lateral").removeClass("d-none");
                     $("#menu-lateral").find(".active").removeClass("active");
                     $("#menu-lateral *[data-scroll='scroll-prensa']").addClass("active");
-                    $("nav").find(".activeImportat").removeClass("activeImportat");
-                    $("nav").find('[data-scroll="scroll-prensa"]').addClass("activeImportat");
+                    $("nav,#menuNav").find(".activeImportat").removeClass("activeImportat");
+                    $("nav,#menuNav").find('[data-scroll="scroll-prensa"]').addClass("activeImportat");
                 },
                 offset: 124
             });
@@ -296,8 +272,8 @@
                     $("#menu-lateral").removeClass("d-none");
                     $("#menu-lateral").find(".active").removeClass("active");
                     $("#menu-lateral *[data-scroll='scroll-portfolio']").addClass("active");
-                    $("nav").find(".activeImportat").removeClass("activeImportat");
-                    $("nav").find('[data-scroll="scroll-portfolio"]').addClass("activeImportat");
+                    $("nav,#menuNav").find(".activeImportat").removeClass("activeImportat");
+                    $("nav,#menuNav").find('[data-scroll="scroll-portfolio"]').addClass("activeImportat");
                 },
                 offset: 124
             });
@@ -307,8 +283,8 @@
                     $("#menu-lateral").removeClass("d-none");
                     $("#menu-lateral").find(".active").removeClass("active");
                     $("#menu-lateral *[data-scroll='scroll-rrhh']").addClass("active");
-                    $("nav").find(".activeImportat").removeClass("activeImportat");
-                    $("nav").find('[data-scroll="scroll-rrhh"]').addClass("activeImportat");
+                    $("nav,#menuNav").find(".activeImportat").removeClass("activeImportat");
+                    $("nav,#menuNav").find('[data-scroll="scroll-rrhh"]').addClass("activeImportat");
                 },
                 offset: 124
             });
@@ -318,8 +294,8 @@
                     $("#menu-lateral").removeClass("d-none");
                     $("#menu-lateral").find(".active").removeClass("active");
                     $("#menu-lateral *[data-scroll='scroll-cliente']").addClass("active");
-                    $("nav").find(".activeImportat").removeClass("activeImportat");
-                    $("nav").find('[data-scroll="scroll-cliente"]').addClass("activeImportat");
+                    $("nav,#menuNav").find(".activeImportat").removeClass("activeImportat");
+                    $("nav,#menuNav").find('[data-scroll="scroll-cliente"]').addClass("activeImportat");
                 },
                 offset: 124
             });
@@ -329,8 +305,8 @@
                     $("#menu-lateral").removeClass("d-none");
                     $("#menu-lateral").find(".active").removeClass("active");
                     $("#menu-lateral *[data-scroll='scroll-contacto']").addClass("active");
-                    $("nav").find(".activeImportat").removeClass("activeImportat");
-                    $("nav").find('[data-scroll="scroll-contacto"]').addClass("activeImportat");
+                    $("nav,#menuNav").find(".activeImportat").removeClass("activeImportat");
+                    $("nav,#menuNav").find('[data-scroll="scroll-contacto"]').addClass("activeImportat");
                 },
                 offset: 124
             });

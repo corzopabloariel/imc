@@ -129,7 +129,6 @@
         promiseFunction = () => {
             promise
                 .then(function(data) {
-                    console.log(data)
                     $(t).removeAttr("disabled");
                     addServicio($("#btnADD"),parseInt(id),data);
                 })
@@ -223,8 +222,8 @@
             let servicioEMP = new Pyrus("servicioEMP");
             
             botones += '<div class="row justify-content-center mt-3 pt-3 border-top">';
-                botones += '<div class="col-md-2">';
-                    botones += '<button id="btnSeccion" type="button" onclick="addSeccion(this);" class="btn btn-block btn-info text-uppercase text-center">sección<i class="fas fa-plus ml-2"></i></button>';
+                botones += '<div class="col-12">';
+                    botones += '<button id="btnSeccion" type="button" onclick="addSeccion(this);" class="d-block btn mx-auto btn-info text-uppercase text-center">sección<i class="fas fa-plus ml-2"></i></button>';
                 botones += '</div>';
             botones += '</div>';
             botones += '<div class="row justify-content-center mt-1">';
@@ -236,27 +235,26 @@
             $("#form .container-form .container-form-tipo").append(botones);
 
             if(window.data !== undefined) {
-                for(let x in data.data) {
+                for(let x in window.data.data) {
                     if(x == "icon") continue;
-                    for(let y in data.data[x]) {
+                    for(let y in window.data.data[x]) {
                         if(y == "seccion" || y == "detalle") continue;
 
-                        $(`#${y}_${x}`).val(data.data[x][y]);
-                        //delete data.data[x][y];
+                        $(`#${y}_${x}`).val(window.data.data[x][y]);
                     }
                 }
-                if(data.data.esp.seccion !== undefined) {
-                    data.data.esp.seccion.forEach(function(element,index) {
-                        addSeccion($("#btnSeccion"),{esp:element,ing:data.data.ing.seccion[index],ita:data.data.ita.seccion[index]});
-                    })
+                if(window.data.data.esp.seccion !== undefined) {
+                    window.data.data.esp.seccion.forEach(function(element,index) {
+                        addSeccion($("#btnSeccion"),{esp:element,ing:window.data.data.ing.seccion[index],ita:window.data.data.ita.seccion[index]});
+                    });
                 }
             }
         } else {
             let servicioALQ = new Pyrus("servicioALQ");
 
             botones += '<div class="row justify-content-center mt-3 pt-3 border-top">';
-                botones += '<div class="col-md-2">';
-                    botones += '<button id="btnGaleria" type="button" onclick="addGaleria(this);" class="btn btn-block btn-info text-uppercase text-center">imagen<i class="fas fa-plus ml-2"></i></button>';
+                botones += '<div class="col-12">';
+                    botones += '<button id="btnGaleria" type="button" onclick="addGaleria(this);" class="btn d-block mx-auto btn-info text-uppercase text-center">imagen<i class="fas fa-plus ml-2"></i></button>';
                 botones += '</div>';
             botones += '</div>';
             botones += '<div class="row justify-content-center mt-1">';
@@ -274,7 +272,6 @@
                         if(y == "galeria") continue;
 
                         $(`#${y}_${x}`).val(data.data[x][y]);
-                        //delete data.data[x][y];
                     }
                 }
                 if(data.data.esp.galeria !== undefined) {
@@ -285,7 +282,7 @@
             }
         }
     };
-    addDetalle = function(t,seccion) {
+    addDetalle = function(t,seccion, dataWindow = null) {
         let detalle = new Pyrus("servicioEMPdetalle");
         let html = "";
         if(window.detalle === undefined) window.detalle = 0;
@@ -293,23 +290,31 @@
 
         html += `<div class="col-md-4 col-12 my-3">${detalle.formulario(window.detalle,`detalle-${seccion}`)}</div>`;
         $(t).closest(".opciones").find(".container-form-opciones").append(html);
+        
+        if(dataWindow !== null) {
+            console.log(dataWindow)
+            $(t).closest(".opciones")
+                .find(".container-form-opciones > div:last-child() .contenedorForm .row .col-12 input:first-child()")
+                    .val(dataWindow.esp)
+                    .next().val(dataWindow.ing)
+                    .next().val(dataWindow.ita);
+        }
     };
     addSeccion = function(t, dataWindow = null) {
-        console.log(dataWindow)
         if(window.seccionContenedor === undefined) window.seccionContenedor = 0;
         window.seccionContenedor ++;
         let seccion = new Pyrus("servicioEMPseccion")
         let html = "";
 
-        html += `<div class="col-12 border-top pt-3 my-3 position-relative">`;
+        html += `<div class="col-12 border-top pt-3 my-3 position-relative seccion">`;
             html += `<i onclick="$(this).parent().remove()" class="fas fa-times-circle position-absolute" style="top: -8px; right: -12px; cursor: pointer;"></i>`;
             html += seccion.formulario(window.seccionContenedor,`servicio-${window.seccionContenedor}`);
             html += `<input type="hidden" name="numeroSeccion[]" value="${window.seccionContenedor}"/>`;
             html += '<div class="row mt-3">';
                 html += '<div class="col-12 imagenes">';
                     html += '<div class="row justify-content-center">';
-                        html += '<div class="col-md-2">';
-                            html += `<button type="button" onclick="addImagenes(this,${window.seccionContenedor});" class="btn btn-block btn-info text-uppercase text-center btnImagenes">imagen<i class="fas fa-camera-retro ml-2"></i></button>`;
+                        html += '<div class="col-12">';
+                            html += `<button type="button" onclick="addImagenes(this,${window.seccionContenedor});" class="btn d-block mx-auto btn-info text-uppercase text-center btnImagenes">imagen<i class="fas fa-camera-retro ml-2"></i></button>`;
                         html += '</div>';
                     html += '</div>';
                     html += '<div class="row justify-content-center container-form-imagenes border-bottom pb-2 mb-2" style="margin-top:0"></div>';
@@ -317,8 +322,8 @@
                 
                 html += '<div class="col-12 opciones border-bottom border-dark pb-3">';
                     html += '<div class="row justify-content-center">';
-                        html += '<div class="col-md-2">';
-                            html += `<button type="button" onclick="addDetalle(this,${window.seccionContenedor});" class="btn btn-block btn-warning text-uppercase text-center">opción<i class="fas fa-plus ml-2"></i></button>`;
+                        html += '<div class="col-12">';
+                            html += `<button type="button" onclick="addDetalle(this,${window.seccionContenedor});" class="btn d-block mx-auto btn-warning text-uppercase text-center btnDetalle">opción<i class="fas fa-plus ml-2"></i></button>`;
                         html += '</div>';
                     html += '</div>';
                     html += '<div class="row justify-content-center container-form-opciones" style="margin-top:0"></div>';
@@ -335,7 +340,6 @@
                 for(let y in dataWindow[x]) {
                     if(y == "images") continue;
                     $(`#${y}_${window.seccionContenedor}_${x}`).val(dataWindow[x][y]);
-                    //delete dataWindow[x][y];
                 }
             }
 
@@ -344,12 +348,16 @@
                     addImagenes($("#form .container-form .container-form-detalles").find("> div:last-child .btnImagenes"),window.seccionContenedor,{esp:element,ing:dataWindow.ing.images[index],ita:dataWindow.ita.images[index]});
                 });
             }
+            if(dataWindow.esp.detalle !== undefined) {
+                dataWindow.esp.detalle.forEach(function(element,index) {
+                    addDetalle($("#form .container-form .container-form-detalles").find("> div:last-child .btnDetalle"),window.seccionContenedor,{esp:element,ing:dataWindow.ing.detalle[index],ita:dataWindow.ita.detalle[index]});
+                });
+            }
         }
 
 
     }
     addImagenes = function(t,seccion,dataWindow = null) {
-        
         let imagen = new Pyrus("servicioEMPimagen");
         if(window.countImage === undefined) window.countImage = {};
         if(window.countImage[seccion] === undefined) window.countImage[seccion] = 0;

@@ -2,8 +2,8 @@
     <h4 class="title text-uppercase text-center mb-0">{{trans('words.menu.services')}}</h4>
     
     <div class="tipo text-center text-uppercase py-3">
-        <a style="cursor: pointer" class="activeImportat" onclick="mostrarServicio(this,'EMP')">{{trans('words.services.business')}}</a>
-        <a style="cursor: pointer" class="" onclick="mostrarServicio(this,'ALQ')">{{trans('words.services.equipment_rental')}}</a>
+        <a data-tipoServicio="EMP" style="cursor: pointer" class="activeImportat" onclick="mostrarServicio(this,'EMP')">{{trans('words.services.business')}}</a>
+        <a data-tipoServicio="ALQ" style="cursor: pointer" class="" onclick="mostrarServicio(this,'ALQ')">{{trans('words.services.equipment_rental')}}</a>
     </div>
     <div class="container">
         <div class="row">

@@ -222,13 +222,13 @@ const ENTIDADES = {
         },
         FORM: [
             {
-                orden: '<div class="col-12 col-md-2">/orden/</div>',
-                tipo: '<div class="col-12 col-md-4">/tipo/</div>',
-                BTN: '<div class="col-3 col-md-1">/BTN/</div>'
+                orden: '<div class="col-12 col-lg-2 col-md-3">/orden/</div>',
+                tipo: '<div class="col-12 col-lg-4 col-md-6">/tipo/</div>',
+                BTN: '<div class="col-3 col-lg-2 col-md-3">/BTN/</div>'
             },
             {
                 iconText: '/iconText/',
-                icon: '<div class="col-12 col-md-4">/icon/<p class="text-center mb-0">Imagen doble [Nomal / Inversa]</p></div>',
+                icon: '<div class="col-12 col-lg-7 col-md-8">/icon/<p class="text-center mb-0">Imagen doble [Nomal / Inversa]</p></div>',
             },
         ],
         FUNCIONES: {

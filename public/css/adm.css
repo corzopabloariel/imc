@@ -304,6 +304,17 @@ fieldset > p:last-child {
     width: 100%;
     display: block;
 }
+.seccion {
+    position: relative;
+}
+.seccion::after {
+    content: "SECCIÓN";
+    position: absolute;
+    left: 0;
+    top: -12px;
+    background: #fff;
+    padding: 0 10px;
+}
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */

@@ -117,7 +117,7 @@ class SliderController extends Controller
     public function destroy($id)
     {
         $data = self::edit($id);
-        $filename = public_path() . "/" . $data["img"];
+        $filename = public_path() . "/" . $data["image"];
         if (file_exists($filename))
             unlink($filename);
 

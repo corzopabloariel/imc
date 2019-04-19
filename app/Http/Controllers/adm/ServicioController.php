@@ -105,7 +105,7 @@ class ServicioController extends Controller
                 $ARR_data["data"][$idiomas[$idioma]] = $auxGaleria;
             }
         } else {
-            $aux = ["titulo" => null, "descripcion" => null, "detalle" => [], "seccion" => []];
+            $aux = ["titulo" => null, "descripcion" => null, "seccion" => []];
             $ARR_data["data"]["esp"] = $aux;
             $ARR_data["data"]["ing"] = $aux;
             $ARR_data["data"]["ita"] = $aux;
@@ -114,7 +114,7 @@ class ServicioController extends Controller
             if(isset($datosRequest["numeroSeccion"])) {
                 for($idioma = 0 ; $idioma < count($idiomas) ; $idioma++) {
                     for($seccion = 0 ; $seccion < count($datosRequest["numeroSeccion"]) ; $seccion++) {
-                        $aux_seccion = ["titulo" => null, "descripcion" => null, "images" => []];
+                        $aux_seccion = ["titulo" => null, "descripcion" => null, "images" => [], "detalle" => []];
                         $seccionDATA = $datosRequest["numeroSeccion"][$seccion];
                         foreach($aux_seccion AS $kkk => $vvv) {
                             if($kkk == "images") {
@@ -165,8 +165,23 @@ class ServicioController extends Controller
                                 }
                                 continue;
                             }
+                            if($kkk == "detalle") {
+                                // DETALLE
+                                // Español  0 +3
+                                // Inglés   1 +3
+                                // Italiano 2 +3
+                                if(isset($datosRequest["titulo_detalle-{$seccionDATA}"])) {
+                                    for($detalle = $idioma ; $detalle < $datosRequest["titulo_detalle-{$seccionDATA}"] ; $detalle += 3) {
+                                        if(!isset($datosRequest["titulo_detalle-{$seccionDATA}"][$detalle])) break;
+                                        $aux_seccion["detalle"][] = $datosRequest["titulo_detalle-{$seccionDATA}"][$detalle];
+                                    }
+                                }
+                                continue;
+                            }
                             $aux_seccion[$kkk] = $datosRequest["{$kkk}_servicio-{$seccionDATA}"][$idioma];
                         }
+                        
+                            
                         $ARR_data["data"][$idiomas[$idioma]]["seccion"][] = $aux_seccion;
                     }
                 }
@@ -180,7 +195,6 @@ class ServicioController extends Controller
                 }
             }
         }
-        dd($ARR_data);
         $ARR_data["data"] = json_encode($ARR_data["data"]);
         
         if(is_null($data)) {//NUEVO

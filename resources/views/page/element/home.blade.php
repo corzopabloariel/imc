@@ -1,4 +1,4 @@
-<div id="carouselExampleIndicators" class="carousel slide d-none d-lg-block" data-ride="carousel">
+<div id="carouselExampleIndicators" class="carousel slide wrapper-slider" data-ride="carousel">
     <ol class="carousel-indicators">
         @for($i = 0 ; $i < count($slider) ; $i++)
             @if($i == 0)

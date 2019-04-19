@@ -355,22 +355,6 @@ nav .activeImportat {
     height: 268px;
     width: 268px;
 }
-.wrapper-home {
-    background-color: #F5F5F5;
-}
-.wrapper-home .title {
-    color: #0D7855;
-    font-size: 28px;
-}
-.wrapper-home .caracteristicas {
-    margin-top: 2em;
-}
-.wrapper-home .caracteristicas li {
-    font-weight: 600;
-}
-.wrapper-home .caracteristicas li + li {
-    margin-top: 1em;
-}
 .wrapper-empresa h3.title {
     color: #FE7122;
     font-size: 30px;
@@ -485,7 +469,7 @@ nav ul li {
 }
 .wrapper-mercado table ul {
     font-size: 18px;
-    width: 60%;
+    width: 70%;
     margin: auto;
     color: #595959;
     list-style-image: url(../images/general/item_1.fw.png);
@@ -516,6 +500,12 @@ nav ul li {
     border-radius: 3px;
     outline: none;
 }
+.wrapper-prensa .volver {
+    left: 0;
+    top: calc(50% - 14px);
+    font-size: 14px;
+    font-weight: normal;
+}
 /* ---------------------------------------------------
     SERVICIO
 ----------------------------------------------------- */
@@ -542,6 +532,7 @@ nav ul li {
     font-size: 40px;
     color: #000000;
     font-weight: bold;
+    padding-top: .5em;
 }
 .wrapper-servicio .icon-servicio {
     width: 96px;
@@ -562,6 +553,16 @@ nav ul li {
 }
 .wrapper-servicio .card-columns .card img {
     cursor: pointer;
+}
+.wrapper-servicio .volver {
+    left: 0;
+    top: calc(50% - 14px);
+    font-size: 14px;
+    font-weight: normal;
+}
+.wrapper-servicio ul {
+    list-style-image: url(../images/general/item_1.fw.png);
+    list-style-position: outside;
 }
 /* ---------------------------------------------------
     CALIDAD
@@ -736,12 +737,21 @@ nav ul li {
     top: calc(50% - 27.5px);
 }
 .wrapper-oferta .rslides_nav.prev {
-    left: -20px;
+    left: 0;
     background: url(../images/general/arrow-left.fw.png) !important;
 }
 .wrapper-oferta .rslides_nav.next {
     background: url(../images/general/arrow-right.fw.png) !important;
-    right: -20px;
+    right: 0;
+}
+.wrapper-oferta form {
+    padding: 0 30px;
+}
+.wrapper-oferta .volver {
+    left: 0;
+    top: calc(50% - 14px);
+    font-size: 14px;
+    font-weight: normal;
 }
 /* ---------------------------------------------------
     CLIENTES
@@ -766,7 +776,10 @@ nav ul li {
     height: 55px;
 }
 .slick-next {
-    right: -25px;
+    right: -30px;
+}
+.slick-prev {
+    left: -30px;
 }
 .slick-prev:before, .slick-next:before {
     opacity: 0 !important;
@@ -965,6 +978,15 @@ footer ul li + li a {
     align-items: initial;
     justify-content: initial;
 }
+#menuNav .activeImportat,
+#menuNav .activeIdioma {
+    color: #D7BE89 !important;
+}
+#menuNav .idiomas li + li {
+    margin-left: 10px;
+    padding-left: 10px;
+    border-left: 1px solid #8C8C99;
+} 
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */
@@ -976,6 +998,23 @@ footer ul li + li a {
         width: auto !important;
     }
 }
+@media (max-width: 433px) {
+    .wrapper-oferta .volver,
+    .wrapper-servicio .volver,
+    .wrapper-prensa .volver {
+        top: 0px;
+    }
+}
+@media (max-width: 460px) {
+    .carousel .carousel-item .texto {
+        display: none;
+    }
+}
+@media (max-width: 470px) {
+    .carousel .carousel-item .texto {
+        width: 100%;
+    }
+}
 @media (max-width: 767px) {
     #nav-mobile {
         display: none;
@@ -985,12 +1024,14 @@ footer ul li + li a {
     }
 }
 @media (max-width: 983px) {
-    .wrapper-slogan {
+    .wrapper-slider {
         margin-top:124px;
-        padding-top: 30px;
     }
     .wrapper-slogan p:last-child {
         width: 60%;
+    }
+    .carousel .carousel-item .texto {
+        top: 50px;
     }
 }
 @media (max-width: 900px) {
@@ -1000,7 +1041,7 @@ footer ul li + li a {
 }
 @media (min-width: 992px) {
     .extra {
-        padding-left:8%;
+        margin-left:8%;
     }
 }
 @media (max-width: 991px) {
@@ -1025,6 +1066,9 @@ footer ul li + li a {
     }
     .wrapper-prensa .title {
         text-align: center;
+    }
+    .wrapper-mercado table ul {
+        width: 100%;
     }
 }
 @media (max-width: 992px) {

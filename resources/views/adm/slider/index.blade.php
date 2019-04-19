@@ -117,6 +117,7 @@ let deleteSlider = function(id, t) {
     promiseFunction = () => {
         promise
             .then(function(msg) {
+                console.log(msg)
                 $("#tabla").find(`tr[data-id="${id}"]`).remove();
                 if($("#tabla").find("tbody").html().trim() == "")
                     $("#tabla").find("tbody").html('<tr><td colspan="4" class="text-uppercase text-center">sin datos</td></tr>');

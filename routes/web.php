@@ -18,6 +18,7 @@ Route::group(['prefix' => 'index', 'as' => 'index'], function() {
 });
 Route::get('{idioma}/rrhh/{id}', [ 'uses' => 'page\GdsController@rrhh', 'as' => 'rrhh' ]);
 Route::get('{idioma}/servicio/{id}', [ 'uses' => 'page\GdsController@servicio', 'as' => 'servicio' ]);
+Route::get('{idioma}/prensa', [ 'uses' => 'page\GdsController@prensa', 'as' => 'prensa' ]);
 
 Auth::routes();
 

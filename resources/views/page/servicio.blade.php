@@ -44,27 +44,29 @@
         @include('page.elementos.navLateral')
         @include('page.element.nav')
         
-        <div style="padding: 174px 0 60px 0;" class="wrapper-servicio container">
-            <div class="row justify-content-center">
-                <div class="col-md-10 col-12">
-                    <h4 class="position-relative text-uppercase text-center title">
-                        <small style="left: 0; font-size: 14px; font-weight: normal;" class="position-absolute navbar"><a style="color: #D7BE89 !important" href="{{ URL::to( 'index/' . $idioma ) }}" data-scroll="scroll-servicio">« Volver</a></small>
-                        {{trans('words.menu.services')}}
-                    </h4>
-                    <div class="tipo text-center text-uppercase py-3">
-                        @if($servicio["tipo"] == "EMP")
-                            <a style="cursor: pointer" class="activeImportat">{{trans('words.services.business')}}</a>
-                            <a style="cursor: pointer" class="" href="{{ URL::to( 'index/' . $idioma ) }}" data-scroll="scroll-servicio">{{trans('words.services.equipment_rental')}}</a>
-                        @else
-                            <a style="cursor: pointer" class="" href="{{ URL::to( 'index/' . $idioma ) }}" data-scroll="scroll-servicio">{{trans('words.services.business')}}</a>
-                            <a style="cursor: pointer" class="activeImportat">{{trans('words.services.equipment_rental')}}</a>
-                        @endif
-                    </div>
-                    <section>
+        @include('page.element.navModal')
+        <div style="padding: 174px 0 60px 0;" class="wrapper-servicio">
+            <div class="container"> 
+                <div class="row justify-content-center">
+                    <div class="col-md-10 col-12">
+                        <h4 class="position-relative text-uppercase text-center title">
+                            <small class="position-absolute navbar volver"><a style="color: #D7BE89 !important" href="{{ URL::to( 'index/' . $idioma ) }}" data-scroll="scroll-servicio">« Volver</a></small>
+                            {{trans('words.menu.services')}}
+                        </h4>
+                        <div class="tipo text-center text-uppercase py-3">
+                            @if($servicio["tipo"] == "EMP")
+                                <a style="cursor: pointer" class="activeImportat" href="{{ URL::to( 'index/' . $idioma ) }}" data-tipo="EMP" data-scroll="scroll-servicio">{{trans('words.services.business')}}</a>
+                                <a style="cursor: pointer" class="" href="{{ URL::to( 'index/' . $idioma ) }}" data-tipo="ALQ" data-scroll="scroll-servicio">{{trans('words.services.equipment_rental')}}</a>
+                            @else
+                                <a style="cursor: pointer" class="" href="{{ URL::to( 'index/' . $idioma ) }}" data-tipo="EMP" data-scroll="scroll-servicio">{{trans('words.services.business')}}</a>
+                                <a style="cursor: pointer" class="activeImportat" href="{{ URL::to( 'index/' . $idioma ) }}" data-tipo="ALQ" data-scroll="scroll-servicio">{{trans('words.services.equipment_rental')}}</a>
+                            @endif
+                        </div>
+                        
                         <div class="container">
                             <div class="row justify-content-center">
                                 @if( $servicio["tipo"] == "EMP")
-                                <div class="col-md-2 col-4">
+                                <div class="col-md-2 col-6">
                                     <div class="d-flex justify-content-center">
                                         <div class="icon-servicio">
                                             <img src="{{ asset($servicio['icon']) }}" alt="" srcset="">
@@ -72,19 +74,10 @@
                                     </div>
                                 </div>
                                 @endif
-                                <div class="col-md-10 col-8">
-
+                                <div class="col-md-10 col-12">
+                                    
                                     <h5>{!! $servicio["data"]["titulo"] !!}</h5>
                                     <p>{!! $servicio["data"]["descripcion"] !!}</p>
-                                    @isset($servicio["data"]["detalle"])
-                                    <ul class="row mt-1 list-1">
-                                        @foreach($servicio["data"]["detalle"] AS $e)
-                                            @if($e != "null" && !is_null($e))
-                                            <li class="col-md-4 col-12">{{ $e }}</li>
-                                            @endif
-                                        @endforeach
-                                    </ul>
-                                    @endisset
                                     @isset($servicio["data"]["galeria"])
                                         <div class="card-columns mt-3">
                                         @foreach($servicio["data"]["galeria"] AS $i)
@@ -97,11 +90,21 @@
                                         @endforeach
                                         </div>
                                     @endisset
+                                    
                                     @isset($servicio["data"]["seccion"])
                                         @foreach($servicio["data"]["seccion"] AS $s)
                                         <div class="mt-4">
                                             <h5>{{$s["titulo"]}}</h5>
                                             <div class="text-justify">{!!$s["descripcion"]!!}</div>
+                                            @isset($s["detalle"])
+                                                <ul class="row mt-1 list-1">
+                                                    @foreach($s["detalle"] AS $e)
+                                                        @if($e != "null" && !is_null($e))
+                                                        <li class="col-md-4 col-12">{{ $e }}</li>
+                                                        @endif
+                                                    @endforeach
+                                                </ul>
+                                            @endisset
                                             <div class="card-columns mt-3">
                                             @foreach($s["images"] AS $i)
                                                 <div class="card">
@@ -118,8 +121,8 @@
                                 </div>
                             </div>
                         </div>
-                    </section>
-                    
+                        
+                    </div>
                 </div>
             </div>
         </div>
@@ -138,11 +141,16 @@
                         $("#nav").removeClass("activeScroll");
                 });
             });
-            $("nav").find(".activeImportat").removeClass("activeImportat");
-            $("nav").find('[data-scroll="scroll-servicio"]').addClass("activeImportat");
-
-            $(".navbar a").click(function() {
+            $("nav,#menuNav").find(".activeImportat").removeClass("activeImportat");
+            $("nav,#menuNav").find('[data-scroll="scroll-servicio"]').addClass("activeImportat");
+            $(".tipo a").click(function() {
                 localStorage.setItem('scroll', $(this).data("scroll"));
+                localStorage.setItem('tipoServicio', $(this).data("tipo"));
+            });
+            $(".navbar a,#menuNav a").click(function() {
+                localStorage.setItem('scroll', $(this).data("scroll"));
+                url = "{{ URL::to( 'index/' . $idioma ) }}";
+                window.location = url;
             });
 
             ampliar = function(t) {

@@ -17,7 +17,7 @@
                     <div class="brand-logo position-absolute" style="left: -5px;top: -30px;">
                         <canvas></canvas>
                     </div>
-                    <button id="btnMenu" class="navbar-toggler position-absolute text-white" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" style="right: 0; top: calc(50% - 15px);">
+                    <button id="btnMenu" class="navbar-toggler position-absolute text-white" type="button" data-toggle="modal" data-target="#menuNav" style="right: 0; top: calc(50% - 15px);">
                         <i class="fas fa-bars"></i>
                     </button>
                     <ul id="nav-mobile" class="justify-content-end text-white text-uppercase navbar mb-0 h-100 position-relative pr-0">
