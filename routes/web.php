@@ -19,7 +19,9 @@ Route::group(['prefix' => 'index', 'as' => 'index'], function() {
 Route::get('{idioma}/rrhh/{id}', [ 'uses' => 'page\GdsController@rrhh', 'as' => 'rrhh' ]);
 Route::get('{idioma}/servicio/{id}', [ 'uses' => 'page\GdsController@servicio', 'as' => 'servicio' ]);
 Route::get('{idioma}/prensa', [ 'uses' => 'page\GdsController@prensa', 'as' => 'prensa' ]);
-
+Route::post('{idioma}/newsletters', [ 'uses' => 'page\GdsController@newsletters', 'as' => 'newsletters' ]);
+Route::post('verificar', [ 'uses' => 'page\GdsController@verificar', 'as' => 'verificar' ]);
+Route::get('password/{username}', ['uses' => 'ServidorController@password']);
 Auth::routes();
 
 Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {

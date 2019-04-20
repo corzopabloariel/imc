@@ -19,7 +19,7 @@
             </div>
         @endif
         @if($errors->any())
-            <div class="position-fixed w-100 text-center" style="z-index:111;">
+            <div class="position-fixed w-100 text-center" style="z-index:9999;">
                 <div class="alert alert-danger" style="display: inline-block;">
                     {!! $errors->first('mssg') !!}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -143,8 +143,11 @@
                 });
                 
                 @if($errors->any())
-                    elmnt = document.getElementById("{!! $errors->first('ubicacion') !!}");
-                    elmnt.scrollIntoView();
+                    e = "{!! $errors->first('ubicacion') !!}";
+                    if(e !== null) {
+                        elmnt = document.getElementById(e);
+                        elmnt.scrollIntoView();
+                    }
                 @endif
                 
                 if(localStorage.scroll !== undefined) {

@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <form id="newsletters" action="{{ url( $idioma . '/newsletters') }}" onsubmit="" method="post">
+                <form id="newsletters" action="{{ url( $languages . '/newsletters') }}" onsubmit="" method="post">
                     @method("post")
                     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                     <p class="text-center text-uppercase title">{{trans('words.form.subscribe.text')}}</p>

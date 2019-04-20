@@ -40,10 +40,12 @@ return [
         'pass' => 'Password',
         'submit' => 'Download',
         'request_pass' => 'Request password',
-        'forgot_pass' => 'I forgot my password'
+        'forgot_pass' => 'I forgot my password',
+        'reset' => 'Accept'
     ],
     'alert' => [
         'user' => 'Add user to request password change',
+        'not' => 'User not found',
         'request' => 'The request has been sent, we will contact you shortly.',
     ],
     'details' => [

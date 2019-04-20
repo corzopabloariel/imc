@@ -40,7 +40,8 @@ return [
         'pass' => 'Contraseña',
         'submit' => 'Descargar',
         'request_pass' => 'Recuperar contraseña',
-        'forgot_pass' => 'Olvidé mi contraseña'
+        'forgot_pass' => 'Olvidé mi contraseña',
+        'reset' => 'Aceptar'
     ],
     'details' => [
         'name' => 'empresa',
@@ -50,6 +51,7 @@ return [
     ],
     'alert' => [
         'user' => 'Agregue usuario para solicitar cambio de contraseña',
+        'not' => 'Usuario no encontrado',
         'request' => 'La solicitud ha sido mandada, en breve nos comunicaremos con ud.',
     ],
     'work' => [

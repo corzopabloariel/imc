@@ -40,7 +40,8 @@ return [
         'pass' => 'password',
         'submit' => 'scaricare',
         'request_pass' => 'Recupera password',
-        'forgot_pass' => 'Ho dimenticato la mia password'
+        'forgot_pass' => 'Ho dimenticato la mia password',
+        'reset' => 'Accettare'
     ],
     'details' => [
         'name' => 'società',
@@ -50,6 +51,7 @@ return [
     ],
     'alert' => [
         'user' => 'Aggiungi utente per richiedere la modifica della password.',
+        'not' => 'Utente non trovato',
         'request' => 'La richiesta è stata inviata, ti contatteremo a breve.',
     ],
     'work' => [

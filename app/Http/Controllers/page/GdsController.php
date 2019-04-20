@@ -4,6 +4,8 @@ namespace App\Http\Controllers\page;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+
 use App;
 use App\Slider;
 use App\Contenido;
@@ -17,7 +19,7 @@ use App\Trabajo;
 use App\Cliente;
 
 use App\User;
-//use App\Usuariocliente;
+use App\Usuariocliente;
 
 //use App\Newsletter;
 
@@ -149,6 +151,48 @@ class GdsController extends Controller
             $p["documento"] = json_decode($p["documento"], true)[$languages];
         }
         return view('page.prensa',compact('empresa','languages','idioma','prensa','archivosPrensa'));
+    }
+
+    public function newsletters(Request $request, $idioma) {
+        $datosRequest = $request->all();
+        $err = ["esp" => "Email no puede estar vacío", "ing" => "Email can not be empty","ita" => "l'email non può essere vuota"];
+        if(empty($datosRequest["email"]))
+            return back()->withErrors(['mssg' => $err[$idioma],'ubicacion' => 'scroll-contacto']);
+    }
+    public function verificar(Request $request) {
+        $datosRequest = $request->all();
+        $languages = $datosRequest["idioma"];
+        
+        $user = Usuariocliente::where('username',$datosRequest['username'])->first();
+
+        $usuario = ["esp" => "Usuario no encontrado","ing" => "User not found", "ita" => "Utente non trovato"];
+        $acceso = ["esp" => "Usuario bloqueado", "ing" => "Access denied", "ita" => "Accesso negato"];
+        $password = ["esp" => "Contraseña incorrecta", "ing" => "Incorrect password", "ita" => "password errata"];
+        
+        if(empty($user))
+            return ["msg" => $usuario[$languages], "estado" => 0];
+        if($user["estado"] == 1)
+            return ["msg" => $acceso[$languages], "estado" => -1];
+        
+        $create_time = strtotime($user["created_at"]);
+        $fecha_time = strtotime($user["fecha"]);
+        $hoy_time = strtotime("now");
+        
+        if($hoy_time > $fecha_time) {
+            $user->fill(["estado" => 1]);
+            $user->save();
+            return ["msg" => $acceso[$languages], "estado" => -1];
+        }
+            
+        if(Hash::check($datosRequest["password"], $user["password"])) {
+            $archivosPrensa = Archivo::where('seccion','prensa')->orderBy('orden')->get();
+            $Arr_link = [];
+            foreach($archivosPrensa AS $p)
+                $Arr_link[$p["tipo"]] = json_decode($p["documento"], true)[$languages];
+            
+            return ["archivos" => $Arr_link];
+        } else
+            return ["msg" => $password[$languages], "estado" => 0];
     }
 
     public function datosEmpresa() {

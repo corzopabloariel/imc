@@ -491,6 +491,11 @@ nav ul li {
     text-align: right;
     font-style: italic;
 }
+.wrapper-prensa- .title {
+    font-size: 40px;
+    font-weight: bold;
+    padding-top: .5em;
+}
 .wrapper-prensa .btn-reverse {
     color: #D7BE89;
     border: 1px solid #D7BE89;
@@ -500,11 +505,14 @@ nav ul li {
     border-radius: 3px;
     outline: none;
 }
-.wrapper-prensa .volver {
+.wrapper-prensa- .volver {
     left: 0;
     top: calc(50% - 14px);
     font-size: 14px;
     font-weight: normal;
+}
+.wrapper-prensa- .documento:first-child {
+    justify-content: flex-end;
 }
 /* ---------------------------------------------------
     SERVICIO
@@ -1001,7 +1009,7 @@ footer ul li + li a {
 @media (max-width: 433px) {
     .wrapper-oferta .volver,
     .wrapper-servicio .volver,
-    .wrapper-prensa .volver {
+    .wrapper-prensa- .volver {
         top: 0px;
     }
 }
@@ -1013,6 +1021,14 @@ footer ul li + li a {
 @media (max-width: 470px) {
     .carousel .carousel-item .texto {
         width: 100%;
+    }
+}
+@media (max-width: 576px) {
+    .wrapper-prensa- .documento {
+        justify-content: center!important;
+    }
+    .wrapper-prensa- .documento + .documento {
+        margin-top: 3em;
     }
 }
 @media (max-width: 767px) {
