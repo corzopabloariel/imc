@@ -4,8 +4,10 @@ namespace App\Http\Controllers\adm;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use App\Cliente;
 use App\Usuariocliente;
+use App\Newsletter;
 class ClienteController extends Controller
 {
     /**
@@ -87,6 +89,9 @@ class ClienteController extends Controller
         if($new) {
             if(empty($datosRequest["password"]))
                 return back()->withErrors(['mssg' => 'La contraseña no puede estar vacio']);
+            $aux = Usuariocliente::where("username",$datosRequest["username"])->first();
+            if(!empty($aux))
+                return back()->withErrors(['mssg' => 'Usuario existente']);
             $ARR_data["password"] = Hash::make($datosRequest["password"]);
         }
         
@@ -99,6 +104,7 @@ class ClienteController extends Controller
                 else
                     $ARR_data["password"] = Hash::make($datosRequest["password"]);
             }
+            $ARR_data["estado"] = 0;
             $data->fill($ARR_data);
             $data->save();
         }
@@ -114,6 +120,10 @@ class ClienteController extends Controller
     {
         return Cliente::find($id);
     }
+    public function editG($id)
+    {
+        return Usuariocliente::find($id);
+    }
 
     /**
      * Update the specified resource in storage.
@@ -126,6 +136,12 @@ class ClienteController extends Controller
     {
         $data = self::edit($id);
         self::store($request,$data);
+        return back();
+    }
+    public function updateG(Request $request, $id)
+    {
+        $data = self::editG($id);
+        self::storeG($request,$data,0);
         return back();
     }
 
@@ -143,6 +159,22 @@ class ClienteController extends Controller
             unlink($filename);
 
         Cliente::destroy($id);
+        return 0;
+    }
+    public function destroyG($id)
+    {
+        Usuariocliente::destroy($id);
+        return 0;
+    }
+
+    public function newsletters() {
+        $title = "Newsletter";
+        $news = Newsletter::orderBy("idioma")->orderBy("email")->get();
+        return view('adm.cliente.newsletter',compact('title','news'));
+    }
+
+    public function newsDelete($id) {
+        Newsletter::destroy($id);
         return 0;
     }
 }

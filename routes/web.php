@@ -22,6 +22,7 @@ Route::get('{idioma}/prensa', [ 'uses' => 'page\GdsController@prensa', 'as' => '
 Route::post('{idioma}/newsletters', [ 'uses' => 'page\GdsController@newsletters', 'as' => 'newsletters' ]);
 Route::post('verificar', [ 'uses' => 'page\GdsController@verificar', 'as' => 'verificar' ]);
 Route::get('password/{username}', ['uses' => 'ServidorController@password']);
+Route::post('envio/{id}/{idioma}', [ 'uses' => 'page\GdsController@envio', 'as' => 'envio' ]);
 Auth::routes();
 
 Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
@@ -59,11 +60,14 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
         Route::get('deleteG/{id}', ['uses' => 'adm\ClienteController@destroyG', 'as' => '.destroyG']);
         Route::post('update/{id}', ['uses' => 'adm\ClienteController@update', 'as' => 'update']);
         Route::post('updateG/{id}', ['uses' => 'adm\ClienteController@updateG', 'as' => 'updateG']);
+        
+        Route::get('newsletters', ['uses' => 'adm\ClienteController@newsletters', 'as' => '.newsletters']);
+        Route::get('newsletter/{id}', ['uses' => 'adm\ClienteController@newsDelete', 'as' => '.newsDelete']);
     });
     /**
      * RRHH
      */
-    Route::group(['prefix' => 'rrhh', 'as' => 'rrhh'], function() {
+    Route::group(['prefix' => 'recursos', 'as' => 'recursos'], function() {
         Route::get('index', ['uses' => 'adm\RRHHcontroller@index', 'as' => '.index']);
         Route::post('store', ['uses' => 'adm\RRHHcontroller@store', 'as' => '.store']);
         Route::get('edit/{id}', ['uses' => 'adm\RRHHcontroller@edit', 'as' => '.edit']);
@@ -110,7 +114,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
         });
     });
     /**
-     * DATOS GDS
+     * DATOS
      */
     Route::group(['prefix' => 'empresa', 'as' => 'empresa'], function() {
         Route::get('index', ['uses' => 'adm\EmpresaController@index', 'as' => '.index']);
@@ -120,8 +124,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
         
         Route::get('usuarios', ['uses' => 'adm\EmpresaController@usuarios', 'as' => '.usuarios']);
 
-
         Route::get('mis_datos', ['uses' => 'adm\EmpresaController@mis_datos', 'as' => '.mis_datos']);
+        Route::post('mis_datos/{id}', ['uses' => 'adm\EmpresaController@mis_datos_s', 'as' => '.mis_datos_s']);
         Route::get('edit/{id}', ['uses' => 'adm\EmpresaController@edit', 'as' => '.edit']);
         Route::get('delete/{id}', ['uses' => 'adm\EmpresaController@destroy', 'as' => '.destroy']);
         Route::post('{seccion}/update', ['uses' => 'adm\EmpresaController@update', 'as' => 'update']);

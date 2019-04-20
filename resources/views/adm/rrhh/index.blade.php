@@ -17,7 +17,7 @@
                     <button onclick="addDelete(this)" type="button" class="close" aria-label="Close">
                         <span aria-hidden="true"><i class="fas fa-times"></i></span>
                     </button>
-                    <form id="form" novalidate class="pt-2" action="{{ url('/adm/rrhh/store') }}" method="post" enctype="multipart/form-data">
+                    <form id="form" novalidate class="pt-2" action="{{ url('/adm/recursos/store') }}" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                         <div class="container-form"></div>
                     </form>
@@ -86,7 +86,7 @@ window.seccion = new Pyrus("rrhh");
 deleteCliente = function(id, t) {
     $(t).attr("disabled",true);
     let promise = new Promise(function (resolve, reject) {
-        let url = `{{ url('/adm/cliente/delete') }}/${id}`;
+        let url = `{{ url('/adm/recursos/delete') }}/${id}`;
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.open( "GET", url, true );
         
@@ -110,7 +110,7 @@ deleteCliente = function(id, t) {
 editCliente = function(id, t) {
     $(t).attr("disabled",true);
     let promise = new Promise(function (resolve, reject) {
-        let url = `{{ url('/adm/rrhh/edit') }}/${id}`;
+        let url = `{{ url('/adm/recursos/edit') }}/${id}`;
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.responseType = 'json';
         xmlHttp.open( "GET", url, true );
@@ -140,9 +140,9 @@ addCliente = function(t, id = 0, data = null) {
     $("#wrapper-tabla").toggle("fast");
 
     if(id != 0)
-        action = `{{ url('/adm/rrhh/update/') }}/${id}`;
+        action = `{{ url('/adm/recursos/update/') }}/${id}`;
     else
-        action = "{{ url('/adm/rrhh/store') }}";
+        action = "{{ url('/adm/recursos/store') }}";
     if(data !== null) {
         data.data = JSON.parse(data.data);
         $(`[name="orden"]`).val(data.orden);

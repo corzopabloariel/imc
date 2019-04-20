@@ -1,10 +1,29 @@
 const ENTIDADES = {
+    usuario: {
+        ATRIBUTOS: {
+            username: {TIPO:"TP_STRING",MAXLENGTH:30,NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"usuario"},
+            name: {TIPO:"TP_STRING",MAXLENGTH:100,NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase",NOMBRE:"nombre"},
+            password: {TIPO:"TP_PASSWORD",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"contraseña"},
+            is_admin: {TIPO:"TP_ENUM",VISIBILIDAD:"TP_VISIBLE",ENUM:{1:"Administrador",0:"Usuario"},NOMBRE:"Tipo",CLASS:"text-uppercase"},
+        },
+        FORM: [
+            {
+                name: '<div class="col-7 col-md-6">/name/</div>',
+                is_admin: '<div class="col-5 col-md-4">/is_admin/</div>',
+                BTN: '<div class="col-3 col-md-2">/BTN/</div>'
+            },
+            {
+                username: '<div class="col-6">/username/</div>',
+                password: '<div class="col-6">/password/</div>',
+            }
+        ],
+    },
     clienteG: {
         ATRIBUTOS: {
             username: {TIPO:"TP_STRING",MAXLENGTH:30,NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"usuario"},
-            name: {TIPO:"TP_STRING",MAXLENGTH:100,NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"nombre"},
+            name: {TIPO:"TP_STRING",MAXLENGTH:100,NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase",NOMBRE:"nombre"},
             password: {TIPO:"TP_PASSWORD",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"contraseña"},
-            fecha: {TIPO:"TP_FECHA",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"acceso hasta"}
+            fecha: {TIPO:"TP_FECHA",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"acceso hasta"}
         },
         FORM: [
             {

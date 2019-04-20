@@ -8,7 +8,7 @@ class Metadato extends Model
 {
     protected $fillable = [
         'seccion',
-        'meta',
+        'metas',
         'descripcion'
     ];
 }

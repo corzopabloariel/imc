@@ -95,6 +95,7 @@ class RRHHcontroller extends Controller
      */
     public function destroy($id)
     {
-        //
+        RRHH::destroy($id);
+        return back();
     }
 }

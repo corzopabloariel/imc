@@ -8,26 +8,7 @@
         
     </head>
     <body>
-        @if(session('success'))
-            <div class="position-fixed w-100 text-center" style="z-index:111;">
-                <div class="alert alert-success" style="display: inline-block;">
-                    {!! session('success')["mssg"] !!}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            </div>
-        @endif
-        @if($errors->any())
-            <div class="position-fixed w-100 text-center" style="z-index:111;">
-                <div class="alert alert-danger" style="display: inline-block;">
-                    {!! $errors->first('mssg') !!}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            </div>
-        @endif
+        @include('page.element.msg')
         
         @include('page.elementos.navLateral')
         @include('page.element.nav')
@@ -41,7 +22,7 @@
                             <small class="position-absolute volver"><a style="color: #D7BE89 !important" href="{{ URL::to( 'index/' . $idioma ) }}">« Volver</a></small>
                             {{trans('words.rrhh')}}
                         </h4>
-                        <form action="{{ url('/envio/') }}/{{$oferta['id']}}" method="post" enctype="multipart/form-data">
+                        <form action="{{ url('/envio/' . $oferta['id'] . '/' . $languages) }}" method="post" enctype="multipart/form-data">
                             @method('POST')
                             
                             <div class="row">

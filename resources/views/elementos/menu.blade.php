@@ -1,7 +1,8 @@
 <div class="sidebar-header">
+    <i class="fas fa-bars"></i>
     <h3 class="m-0">Menu</h3>
 </div>
-<div class="position-relative" style="height: calc(100% - 73px); overflow-y:auto;">
+<div class="position-relative" style="height: calc(100% - 73px); overflow-y:auto; overflow-x: hidden;">
     <div class="w-100 position-absolute">
         <ul class="list-unstyled components m-0 p-0">
             <li class="">
@@ -97,23 +98,21 @@
                 </ul>
             </li>
             <li>
-                <a data-link="a" href="#rrhhSubmenu" data-toggle="collapse" aria-expanded="false">
+                <a data-link="a" href="{{ route('recursos.index')}}">
                     <i class="fas fa-id-card"></i>
                     <span class="nav-label">RR.HH.</span>
                 </a>
-                <ul class="collapse list-unstyled" id="rrhhSubmenu">
-                    <li>
-                        <a href="{{ route('rrhh.index')}}">
-                            <i class="fas fa-list-ol"></i>
-                            <span class="nav-label">Listado de trabajos</span>
-                        </a>
-                    </li>
-                </ul>
             </li>
             <li>
                 <a data-link="a" href="{{ route('cliente.index')}}">
                     <i class="fas fa-users"></i>
                     <span class="nav-label">Clientes</span>
+                </a>
+            </li>
+            <li>
+                <a data-link="a" href="{{ route('cliente.newsletters')}}">
+                    <i class="fas fa-rss-square"></i>
+                    <span class="nav-label">Newsletter</span>
                 </a>
             </li>
             <li><hr/></li>
@@ -126,22 +125,34 @@
             <li><hr/></li>
             <li>
                 <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false">
+                    <i class="fas fa-compass"></i>
                     <span class="nav-label">IMC</span>
                 </a>
                 <ul class="collapse list-unstyled" id="pageSubmenu">
                     <li>
-                        <a data-link="u" href="{{ route('empresa.index')}}">Datos</a>
+                        <a data-link="u" href="{{ route('empresa.index')}}">
+                            <span>Datos</span>
+                        </a>
                     </li>
                     <li>
-                        <a data-link="u" href="{{ route('empresa.metadatos')}}">Metadatos</a>
+                        <a data-link="u" href="{{ route('empresa.metadatos')}}">
+                            <i class="fas fa-bullhorn"></i>
+                            <span class="nav-label">Metadatos</span>
+                        </a>
                     </li>
                     @if(Auth::user()["is_admin"])
                     <li>
-                        <a data-link="u" href="{{ route('empresa.usuarios')}}">Usuarios</a>
+                        <a data-link="u" href="{{ route('empresa.usuarios')}}">
+                            <i class="fas fa-users-cog"></i>
+                            <span class="nav-label">Usuarios</span>
+                        </a>
                     </li>
                     @else
                     <li>
-                        <a data-link="u" href="{{ route('empresa.mis_datos')}}">Usuarios</a>
+                        <a data-link="u" href="{{ route('empresa.mis_datos')}}">
+                            <i class="fas fa-user-cog"></i>
+                            <span class="nav-label">Mis datos</span>
+                        </a>
                     </li>
                     @endif
                 </ul>

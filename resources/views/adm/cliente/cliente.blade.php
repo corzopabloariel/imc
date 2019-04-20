@@ -76,7 +76,7 @@ window.seccion = new Pyrus("clienteG");
 deleteCliente = function(id, t) {
     $(t).attr("disabled",true);
     let promise = new Promise(function (resolve, reject) {
-        let url = `{{ url('/adm/clienteG/delete') }}/${id}`;
+        let url = `{{ url('/adm/cliente/deleteG') }}/${id}`;
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.open( "GET", url, true );
         
@@ -100,7 +100,7 @@ deleteCliente = function(id, t) {
 editCliente = function(id, t) {
     $(t).attr("disabled",true);
     let promise = new Promise(function (resolve, reject) {
-        let url = `{{ url('/adm/clienteG/edit') }}/${id}`;
+        let url = `{{ url('/adm/cliente/editG') }}/${id}`;
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.responseType = 'json';
         xmlHttp.open( "GET", url, true );
@@ -137,6 +137,13 @@ addCliente = function(t, id = 0, data = null) {
         console.log(data)
         $(`[name="username"]`).val(data.username);
         $(`[name="name"]`).val(data.name);
+        $(`[name="fecha"]`).val(data.fecha);
+
+        html = "";
+        html += '<div class="alert alert-warning mt-2" role="alert">';
+            html += 'Deje la contraseña vacía para mantener la misma; caso contrario, agregue para cambiar.<br/>Al editar un registro, el estado vuelve a <strong>ACTIVO</strong>.';
+        html += '</div>';
+        $("#wrapper-form").parent().append(html);
     }
     elmnt = document.getElementById("form");
     elmnt.scrollIntoView();
@@ -145,6 +152,8 @@ addCliente = function(t, id = 0, data = null) {
 addDelete = function(t) {
     addCliente($("#btnADD"));
     $(`[name="name"],[name="username"],[name="fecha"],[name="password"]`).val("");
+    if($("#wrapper-form").parent().find(".alert").length)
+        $("#wrapper-form").parent().find(".alert").remove();
 };
 init = function() {
     console.log("CONSTRUYENDO FORMULARIO")

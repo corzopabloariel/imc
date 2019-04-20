@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\adm;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use App\Dato;
+use App\Empresa;
 use App\Metadato;
 use App\User;
 class EmpresaController extends Controller
@@ -18,12 +19,11 @@ class EmpresaController extends Controller
     {  
         $title = "Datos de la empresa";
         $seccion = "empresa";
-        $datos = Dato::first();
-        $datos["redes"] = json_decode($datos["redes"], true);
-        $datos["img"] = json_decode($datos["img"], true);
+        $datos = Empresa::first();
+        $datos["contactos"] = json_decode($datos["contactos"], true);
+        $datos["images"] = json_decode($datos["images"], true);
         $datos["domicilio"] = json_decode($datos["domicilio"], true);
-        $datos["tel"] = json_decode($datos["tel"], true);
-        $datos["email"] = json_decode($datos["email"], true);
+        $datos["metadatos"] = json_decode($datos["metadatos"], true);
         
         return view('adm.empresa.index',compact('title','seccion','datos'));
     }
@@ -84,41 +84,33 @@ class EmpresaController extends Controller
         $ARR_datos = [];
         switch($seccion) {
             case "empresa":
-                $datosEmpresa = Dato::first();
-                $datosEmpresa["img"] = json_decode($datosEmpresa["img"], true);
-                $model = new Dato();
+                $datosEmpresa = Empresa::first();
+                $datosEmpresa["images"] = json_decode($datosEmpresa["images"], true);
                 $ARR_data = [];
-                foreach($model->getFillable() AS $f) {
-                    $ARR_data[$f] = [];
-                }
-                $ARR_data["img"] = [
-                    "logo" => null,
-                    "favicon" => null,
-                    "logo_footer" => null,
-                    "data_fiscal" => null
+                $ARR_data["contactos"] = [];
+                $ARR_data["contactos"]["email"] = [];
+                $ARR_data["contactos"]["contacto"] = [];
+                $ARR_data["contactos"]["contacto"]["ba"] = $datosRequest["telefono_ba"];
+                $ARR_data["contactos"]["contacto"]["nq"] = $datosRequest["telefono_nq"];
+                
+                $ARR_data["images"] = $datosEmpresa["images"];
+                $ARR_data["domicilio"] = [];
+                $ARR_data["domicilio"]["ba"] = [
+                    "calle" => $datosRequest["calle_ba"],
+                    "altura" => $datosRequest["altura_ba"],
+                    "cp" => $datosRequest["cp_ba"],
+                    "localidad" => $datosRequest["localidad_ba"]
                 ];
-                $ARR_data["tel"] = $datosRequest["telefono"];
-                $ARR_data["domicilio"] = [
-                    "calle" => $datosRequest["calle"],
-                    "altura" => $datosRequest["altura"],
-                    "localidad" => $datosRequest["localidad"],
-                    "cp" => $datosRequest["cp"]
+                $ARR_data["domicilio"]["nq"] = [
+                    "calle" => $datosRequest["calle_nq"],
+                    "altura" => $datosRequest["altura_nq"],
+                    "mas" => $datosRequest["mas_nq"],
+                    "localidad" => $datosRequest["localidad_nq"]
                 ];
-                $ARR_data["redes"] = [
-                    "facebook" => $datosRequest["facebook"],
-                    "youtube" => $datosRequest["youtube"]
-                ];
-                for($i = 0; $i < count($datosRequest["email"]); $i++) {
-                    if(empty($datosRequest["email"][$i]))
-                        continue;
 
-                    $ARR_data["email"][] = [
-                        "e" => $datosRequest["email"][$i],
-                        "n" => $datosRequest["email_nombre"][$i]
-                    ];
-                }
+                $ARR_data["contactos"]["email"] = $datosRequest["email"];
+                
                 $file_logo = $request->file('logotipo');
-                $file_logoFooter = $request->file('logotipo_footer');
                 $file_favicon = $request->file('favicon');
 
                 if(!is_null($file_logo)) {
@@ -126,53 +118,36 @@ class EmpresaController extends Controller
                     if (!file_exists($path))
                         mkdir($path, 0777, true);
                     
-                    if(!empty($datosEmpresa["img"]["logo"])) {
-                        $filename = public_path() . "/" . $datosEmpresa["img"]["logo"];
+                    if(!empty($datosEmpresa["images"]["logo"])) {
+                        $filename = public_path() . "/" . $datosEmpresa["images"]["logo"];
                         if (file_exists($filename))
                             unlink($filename);
                     }
                     $imageName = 'logo.'.$file_logo->getClientOriginalExtension();
                     $file_logo->move($path, $imageName);
                     
-                    $ARR_data["img"]["logo"] = "images/empresa/{$imageName}";
-                } else
-                    $ARR_data["img"]["logo"] = $datosEmpresa["img"]["logo"];
-                if(!is_null($file_logoFooter)) {
-                    $path = public_path('images/empresa/');
-                    if (!file_exists($path))
-                        mkdir($path, 0777, true);
-                    
-                    if(!empty($datosEmpresa["img"]["logo_footer"])) {
-                        $filename = public_path() . "/" . $datosEmpresa["img"]["logo_footer"];
-                        if (file_exists($filename))
-                            unlink($filename);
-                    }
-                    $imageName = 'logo_footer.'.$file_logoFooter->getClientOriginalExtension();
-                    $file_logoFooter->move($path, $imageName);
-                    
-                    $ARR_data["img"]["logo_footer"] = "images/empresa/{$imageName}";
-                } else
-                    $ARR_data["img"]["logo_footer"] = $datosEmpresa["img"]["logo_footer"];
+                    $ARR_data["images"]["logo"] = "images/empresa/{$imageName}";
+                }
                 if(!is_null($file_favicon)) {
                     $path = public_path('images/empresa/');
                     if (!file_exists($path))
                         mkdir($path, 0777, true);
                     
-                    if(!empty($datosEmpresa["img"]["favicon"])) {
-                        $filename = public_path() . "/" . $datosEmpresa["img"]["favicon"];
+                    if(!empty($datosEmpresa["images"]["favicon"])) {
+                        $filename = public_path() . "/" . $datosEmpresa["images"]["favicon"];
                         if (file_exists($filename))
                             unlink($filename);
                     }
                     $imageName = 'favicon.'.$file_favicon->getClientOriginalExtension();
                     $file_favicon->move($path, $imageName);
                     
-                    $ARR_data["img"]["favicon"] = ["i" => "images/empresa/{$imageName}","e" => $file_favicon->getClientOriginalExtension()];
-                } else
-                    $ARR_data["img"]["favicon"] = $datosEmpresa["img"]["favicon"];
-
-                foreach($model->getFillable() AS $f) {
-                    $ARR_data[$f] = json_encode($ARR_data[$f]);
+                    $ARR_data["images"]["favicon"] = ["i" => "images/empresa/{$imageName}","e" => $file_favicon->getClientOriginalExtension()];
                 }
+                
+                $ARR_data["contactos"] = json_encode($ARR_data["contactos"]);
+                $ARR_data["domicilio"] = json_encode($ARR_data["domicilio"]);
+                $ARR_data["images"] = json_encode($ARR_data["images"]);
+                
                 $datosEmpresa->fill($ARR_data);
                 $datosEmpresa->save();
                 break;
@@ -195,7 +170,7 @@ class EmpresaController extends Controller
 
         $title = "Metadatos";
         $seccion = "metadato";
-        $metadatos = Metadato::orderBy('seccion')->get();
+        $metadatos = Metadato::get();
         
         return view('adm.empresa.index',compact('title','seccion','metadatos'));
     }
@@ -205,7 +180,7 @@ class EmpresaController extends Controller
     }
     /** */
     public function metadatoPOST(Request $request, $id) {
-        $data = metadato::find($id);
+        $data = Metadato::find($id);
         $datosRequest = $request->all();
         unset($datosRequest["_token"]);
         unset($datosRequest["_method"]);
@@ -221,5 +196,25 @@ class EmpresaController extends Controller
         $seccion = "";
         $usuarios = User::orderBy('username')->get();
         return view('adm.empresa.usuario',compact('title','seccion','usuarios'));
+    }
+    public function mis_datos() {
+        $title = "Mis datos";
+        $datos = User::find(Auth::user()["id"]);
+        
+        return view('adm.empresa.mis_datos',compact('title','datos'));
+    }
+    public function mis_datos_s(Request $request,$id) {
+        $datosRequest = $request->all();
+        unset($datosRequest["_token"]);
+        $datos = User::find(Auth::user()["id"]);
+
+        if(empty($datosRequest["password"]))
+            $datosRequest["password"] = $datos["password"];
+        else
+            $datosRequest["password"] = Hash::make($datosRequest["password"]);
+        $datos->fill($datosRequest);
+        $datos->save();
+
+        return back()->withSuccess(['mssg' => "Datos modificados"]);
     }
 }

@@ -1,6 +1,6 @@
 @extends('elementos.main')
 
-@section('headTitle', $title. ' | GDS')
+@section('headTitle', $title. ' | IMC')
 @section('bodyTitle', $title)
 
 @section('body')

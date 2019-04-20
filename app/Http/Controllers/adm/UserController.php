@@ -35,15 +35,27 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $data = null)
     {
         $datosRequest = $request->all();
+        
         unset($datosRequest["_token"]);
         $datosRequest["password"] = Hash::make($datosRequest["password"]);
 
-        User::create($datosRequest);
-
-        return back();
+        if(is_null($data))
+            User::create($datosRequest);
+        else {
+            if(empty($datosRequest["password"]))
+                $datosRequest["password"] = $data["password"];
+            else
+                $datosRequest["password"] = Hash::make($datosRequest["password"]);
+            $data->fill($datosRequest);
+            $data->save();
+        }
+        if(is_null($data))
+            return back();
+        else
+            return back()->withSuccess(['mssg' => "Datos modificados"]);
     }
 
     /**
@@ -77,7 +89,9 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = self::edit($id);
+        self::store($request,$data);
+        return back();
     }
 
     /**
@@ -88,6 +102,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        User::destroy($id);
+        return 0;
     }
 }

@@ -14,14 +14,14 @@
                         <span aria-hidden="true"><i class="fas fa-times"></i></span>
                     </button>
                     <h5 class="card-title"></h5>
-                    <form id="form" novalidate class="pt-2" action="{{ url('/adm/familia/store') }}" method="post" enctype="multipart/form-data">
+                    <form id="form" novalidate class="pt-2" action="{{ url('/adm/empresa/metadato') }}" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                         @method("POST")
                         <div class="row justify-content-md-center">
                             
                             <div class="col-5">
                                 <label for="">Metadatos</label>
-                                <textarea placeholder="Metadatos" name="meta" class="form-control"></textarea>
+                                <textarea placeholder="Metadatos" name="metas" class="form-control"></textarea>
                                 <small id="passwordHelpBlock" class="form-text text-muted">
                                     Palabras separadas con coma (,)
                                 </small>
@@ -41,28 +41,28 @@
         </div>
         <div class="card mt-2" id="wrapper-tabla">
             <div class="card-body">
-                <table class="table table-meta-4 mt-2 mb-0" id="tabla">
+                <table class="table mt-2 mb-0" id="tabla">
                     <thead class="thead-dark">
-                        <th class="text-uppercase">Sección</th>
+                        <th class="text-uppercase text-center">Sección</th>
                         <th class="text-uppercase">Metadatos</th>
                         <th class="text-uppercase">Descripción</th>
-                        <th class="text-uppercase">acción</th>
+                        <th class="text-uppercase text-center">acción</th>
                     </thead>
                     <tbody>
                         @if(count($metadatos) != 0)
                             @foreach($metadatos AS $metadato)
                                 <tr data-id="{{ $metadato['id'] }}">
-                                    <td class="text-uppercase">{!! $metadato["seccion"] !!}</td>
-                                    <td>{!! $metadato["meta"] !!}</td>
+                                    <td class="text-uppercase text-center">{!! $metadato["seccion"] !!}</td>
+                                    <td>{!! $metadato["metas"] !!}</td>
                                     <td>{!! $metadato["descripcion"] !!}</td>
-                                    <td>
+                                    <td class="text-center">
                                         <button type="button" onclick="editMetadato({{ $metadato['id'] }}, this)" class="btn btn-warning mr-1"><i class="fas fa-pencil-alt"></i></button>
                                     </td>
                                 </tr>
                             @endforeach
                         @else
                             <tr>
-                                <td colspan="4" class="text-uppercase text-center">
+                                <td colspan="3" class="text-uppercase text-center">
                                     sin datos
                                 </td>
                             </tr>
@@ -92,7 +92,7 @@ addMetadato = function(t, id = 0, data = null) {
     
     if(data !== null) {
         console.log(data)
-        $(`[name="meta"]`).val(data.meta);
+        $(`[name="metas"]`).val(data.metas);
         $(`[name="descripcion"]`).val(data.descripcion);
         $('.card-title').text(data.seccion.toUpperCase())
     }

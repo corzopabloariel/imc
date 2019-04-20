@@ -23,6 +23,10 @@ use App\Newsletter;
 use App\User;
 use App\Usuariocliente;
 
+use App\Mail\Sendbymail;
+use App\Mail\Sendrecuperar;
+use App\Mail\SendCotizador;
+use Illuminate\Support\Facades\Mail;
 class GdsController extends Controller
 {
     public function empresa() {
@@ -213,16 +217,65 @@ class GdsController extends Controller
         return $empresa;
     }
 
-    public function form(Request $request, $seccion) {
+    /**
+     * @param id - trabajo
+     */
+    public function envio(Request $request, $id, $idioma) {
         $datosRequest = $request->all();
-        if($seccion == "ecobruma") {
+        unset($datosRequest["_token"]);
+        unset($datosRequest["_method"]);
+        $ok = [
+            "esp" => "El mensaje se ha enviado exitosamente.",
+            "ing" => "El mensaje se ha enviado exitosamente.",
+            "ita" => "El mensaje se ha enviado exitosamente."
+        ];
+        $err = [
+            "email" => [
+                "esp" => "Archivo necesario",
+                "ing" => "Archivo necesario",
+                "ita" => "Archivo necesario"
+            ],
+            "campos" => [
+                "esp" => "Los campos <strong>nombre</strong>, <strong>apellido</strong> y <strong>email</strong> son obligatorios",
+                "ing" => "Los campos <strong>nombre</strong>, <strong>apellido</strong> y <strong>email</strong> son obligatorios",
+                "ita" => "Los campos <strong>nombre</strong>, <strong>apellido</strong> y <strong>email</strong> son obligatorios"
+            ],
+            "gral" => [
+                "esp" => "Ha ocurrido un error.",
+                "ing" => "Ha ocurrido un error.",
+                "ita" => "Ha ocurrido un error."
+            ]
+        ];
+        $trabajo = RRHH::find($id);
+        $trabajo["data"] = json_decode($trabajo["data"],true)["esp"];
+        //
+        $archivo = null;
+        if ($request->hasFile('archivo')) {
+            if ($request->file('archivo')->isValid()) {
+                $file = $request->file('archivo');
 
-        } if($seccion == "contacto") {
-            
-        } else {//presupuesto
-
+                $path = public_path('images/archivos/');
+                $request->file('archivo')->move($path, time().'_'.$file->getClientOriginalName());
+                $archivo = 'images/archivos/' . time().'_'.$file->getClientOriginalName();
+            }
         }
-        dd($datosRequest);
+        if(is_null($archivo))
+            return back()->withErrors(['mssg' => $err["email"][$idioma]]);
+        if(empty($datosRequest["nombre"]) || empty($datosRequest["apellido"]) || empty($datosRequest["email"]))
+            return back()
+                ->withErrors(['mssg' => $err["campos"][$idioma]]);
+                
+        Mail::send('emails.welcome', ["data" => $datosRequest,"trabajo" => $trabajo["data"],"provincia" => $trabajo["provincia"]], function ($message) use ($archivo) {
+            $message->from("send@imcarg.com", "RR.HH.");
+            $message->to("corzo.pabloariel@gmail.com");
+            $message->attach($archivo);
+
+            $message->subject("RR.HH.");
+        });
+        if (Mail::failures())
+            return back()->withErrors(['mssg' => $err["gral"][$idioma], 'ubicacion' => 'scroll-rrhh']);
+        
+        return back()->withSuccess(['mssg' => $ok[$idioma]]);
     }
 }
 //6LfyY50UAAAAAJGHw1v6ixJgvBbUOasaTT6Wz-od
