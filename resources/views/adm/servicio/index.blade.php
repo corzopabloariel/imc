@@ -292,7 +292,6 @@
         $(t).closest(".opciones").find(".container-form-opciones").append(html);
         
         if(dataWindow !== null) {
-            console.log(dataWindow)
             $(t).closest(".opciones")
                 .find(".container-form-opciones > div:last-child() .contenedorForm .row .col-12 input:first-child()")
                     .val(dataWindow.esp)

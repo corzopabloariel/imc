@@ -9,7 +9,7 @@
     </head>
     <body>
         @if(session('success'))
-            <div class="position-fixed w-100 text-center" style="z-index:111;">
+            <div class="position-fixed w-100 text-center" style="z-index:9999;">
                 <div class="alert alert-success" style="display: inline-block;">
                     {!! session('success')["mssg"] !!}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">

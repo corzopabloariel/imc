@@ -8,9 +8,12 @@ $("#sidebar .components > li > a").on("click", function() {
 
 $(document).ready(function() {
     //URL
-    $("#sidebar").find(`a[href="${window.url}"]`).addClass("active");
-    $("#sidebar").find(`a[href="${window.url}"]`).closest("ul").addClass("show");
-    $("#sidebar").find(`a[href="${window.url}"]`).closest("ul").prev().attr("aria-expanded",true).parent().addClass("active");
+    if($("#sidebar").find(`a[href="${window.url}"]`).data("link") == "u") {
+        $("#sidebar").find(`a[href="${window.url}"]`).addClass("active");
+        $("#sidebar").find(`a[href="${window.url}"]`).closest("ul").addClass("show");
+        $("#sidebar").find(`a[href="${window.url}"]`).closest("ul").prev().attr("aria-expanded",true).parent().addClass("active");
+    } else
+        $("#sidebar").find(`a[href="${window.url}"]`).parent().addClass("active");
     //URL
 
 });

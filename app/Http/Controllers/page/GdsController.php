@@ -18,10 +18,10 @@ use App\Familia;
 use App\Trabajo;
 use App\Cliente;
 
+use App\Newsletter;
+
 use App\User;
 use App\Usuariocliente;
-
-//use App\Newsletter;
 
 class GdsController extends Controller
 {
@@ -156,8 +156,16 @@ class GdsController extends Controller
     public function newsletters(Request $request, $idioma) {
         $datosRequest = $request->all();
         $err = ["esp" => "Email no puede estar vacío", "ing" => "Email can not be empty","ita" => "l'email non può essere vuota"];
+        $err_no = ["esp" => "Se encuentra suscrito", "ing" => "You are subscribed","ita" => "Sei iscritto"];
+        $success = ["esp" => "Se suscribió correctamente", "ing" => "Subscribed correctly", "ita" => "Iscritto correttamente"];
         if(empty($datosRequest["email"]))
             return back()->withErrors(['mssg' => $err[$idioma],'ubicacion' => 'scroll-contacto']);
+        $aux = Newsletter::where("email",$datosRequest["email"])->first();
+        if(!empty($aux))
+            return back()->withErrors(['mssg' => $err_no[$idioma],'ubicacion' => 'scroll-contacto']);
+        
+        Newsletter::create(["email" => $datosRequest["email"], "idioma" => $idioma]);
+        return back()->withSuccess(['mssg' => $success[$idioma]]);
     }
     public function verificar(Request $request) {
         $datosRequest = $request->all();

@@ -52,9 +52,13 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
         Route::get('index', ['uses' => 'adm\ClienteController@index', 'as' => '.index']);
         Route::get('clientes', ['uses' => 'adm\ClienteController@clientes', 'as' => '.clientes']);
         Route::post('store', ['uses' => 'adm\ClienteController@store', 'as' => '.store']);
+        Route::post('storeG', ['uses' => 'adm\ClienteController@storeG', 'as' => '.storeG']);
         Route::get('edit/{id}', ['uses' => 'adm\ClienteController@edit', 'as' => '.edit']);
+        Route::get('editG/{id}', ['uses' => 'adm\ClienteController@editG', 'as' => '.editG']);
         Route::get('delete/{id}', ['uses' => 'adm\ClienteController@destroy', 'as' => '.destroy']);
+        Route::get('deleteG/{id}', ['uses' => 'adm\ClienteController@destroyG', 'as' => '.destroyG']);
         Route::post('update/{id}', ['uses' => 'adm\ClienteController@update', 'as' => 'update']);
+        Route::post('updateG/{id}', ['uses' => 'adm\ClienteController@updateG', 'as' => 'updateG']);
     });
     /**
      * RRHH

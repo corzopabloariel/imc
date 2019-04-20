@@ -5,6 +5,7 @@ namespace App\Http\Controllers\adm;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Cliente;
+use App\Usuariocliente;
 class ClienteController extends Controller
 {
     /**
@@ -17,6 +18,12 @@ class ClienteController extends Controller
         $title = "Clientes";
         $clientes = Cliente::orderBy('orden')->get();
         return view('adm.cliente.index',compact('title','clientes'));
+    }
+
+    public function clientes() {
+        $title = "Clientes";
+        $clientes = Usuariocliente::get();
+        return view('adm.cliente.cliente',compact('title','clientes'));
     }
 
     /**
@@ -37,7 +44,7 @@ class ClienteController extends Controller
      */
     public function store(Request $request, $data = null)
     {
-        $datosRequest = $request->all();dd($datosRequest);
+        $datosRequest = $request->all();
         $ARR_data = [];
         $ARR_data["nombre"] = $datosRequest["titulo"];
         $ARR_data["orden"] = $datosRequest["orden"];
@@ -63,6 +70,34 @@ class ClienteController extends Controller
                 $filename = public_path() . "/" . $data["image"];
                 if (file_exists($filename))
                     unlink($filename);
+            }
+            $data->fill($ARR_data);
+            $data->save();
+        }
+        return back();
+    }
+    public function storeG(Request $request, $data = null, $new = 1)
+    {
+        $datosRequest = $request->all();
+        $ARR_data = [];
+        $ARR_data["name"] = $datosRequest["name"];
+        $ARR_data["username"] = $datosRequest["username"];
+        $ARR_data["fecha"] = $datosRequest["fecha"];
+
+        if($new) {
+            if(empty($datosRequest["password"]))
+                return back()->withErrors(['mssg' => 'La contraseña no puede estar vacio']);
+            $ARR_data["password"] = Hash::make($datosRequest["password"]);
+        }
+        
+        if(is_null($data))
+            Usuariocliente::create($ARR_data);
+        else {
+            if(!$new) {
+                if(empty($datosRequest["password"]))
+                    $ARR_data["password"] = $data["password"];
+                else
+                    $ARR_data["password"] = Hash::make($datosRequest["password"]);
             }
             $data->fill($ARR_data);
             $data->save();

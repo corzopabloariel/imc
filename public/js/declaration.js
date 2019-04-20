@@ -1,4 +1,25 @@
 const ENTIDADES = {
+    clienteG: {
+        ATRIBUTOS: {
+            username: {TIPO:"TP_STRING",MAXLENGTH:30,NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"usuario"},
+            name: {TIPO:"TP_STRING",MAXLENGTH:100,NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"nombre"},
+            password: {TIPO:"TP_PASSWORD",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"contraseña"},
+            fecha: {TIPO:"TP_FECHA",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"acceso hasta"}
+        },
+        FORM: [
+            {
+                name: '<div class="col-9 col-md-10">/name/</div>',
+                BTN: '<div class="col-3 col-md-2">/BTN/</div>'
+            },
+            {
+                username: '<div class="col-6">/username/</div>',
+                password: '<div class="col-6">/password/</div>',
+            },
+            {
+                fecha: '<div class="col-6">/fecha/</div>',
+            }
+        ],
+    },
     slider: {
         ATRIBUTOS: {
             image: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Archivo seleccionado",INVALID:"Seleccione archivo - 1400x714",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE"},

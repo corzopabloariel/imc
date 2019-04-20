@@ -20,6 +20,16 @@
         <!-- </Styles> -->
     </head>
     <body>
+        @if($errors->any())
+            <div class="position-fixed w-100 text-center" style="z-index:9999;">
+                <div class="alert alert-danger" style="display: inline-block;">
+                    {!! $errors->first('mssg') !!}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        @endif
         <div class="wrapper">
             <!-- Sidebar -->
             <nav id="sidebar" class="position-fixed h-100">
